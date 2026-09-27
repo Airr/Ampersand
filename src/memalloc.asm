@@ -9,13 +9,21 @@ option frame:auto
 
 .code
 
-; -----------------------------------------------------------------------------
-; memalloc - Allocates a memory block of requested size using sys_mmap
-; Input:  size (QWORD) - requested number of bytes
-; Output: rax - pointer to usable memory payload (8-byte header embedded behind)
-; -----------------------------------------------------------------------------
-PUBLIC memalloc
-memalloc PROC USES rbx r12 memsize:QWORD
+;
+;==============================================================================
+; MEMALLOC
+;   Allocates a block of memory from the system's heap.
+;
+; Parameters:
+;   memsize:qword - The size, in bytes, of the memory block to allocate.
+;
+; Returns:
+;   rax = Pointer to the newly allocated block of memory,
+;         or null if an error occurs during allocation.
+;==============================================================================
+
+PUBLIC MEMALLOC
+MEMALLOC PROC USES rbx r12 memsize:QWORD
     mov     rbx, memsize
     test    rbx, rbx
     jz      @memalloc_fail
@@ -51,6 +59,6 @@ memalloc PROC USES rbx r12 memsize:QWORD
 @memalloc_fail:
     xor     rax, rax
     ret
-memalloc ENDP
+MEMALLOC ENDP
 
 end
