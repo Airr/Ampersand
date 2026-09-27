@@ -9,15 +9,19 @@ extrn g_argv    :qword
 
 .code
 
+;
 ;==============================================================================
 ; APPNAME$
-;   Returns the application name from argv[0], without the directory.
-;   "/usr/bin/ls" -> "ls"
+;   Retrieves the name of the current application (usually argv[0]).
+;
+; Parameters:
+;   None
 ;
 ; Returns:
-;   rax = pointer into argv[0] just past the last '/', or the start of the
-;         string if there is no slash. Not a copy, so don't modify it.
+;   rax = Pointer to a string containing the name of the application,
+;         or null if an error occurs.
 ;==============================================================================
+
 PUBLIC APPNAME$
 APPNAME$ PROC
     mov     rax, g_argv
