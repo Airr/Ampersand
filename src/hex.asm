@@ -9,15 +9,20 @@ extrn ALLOC   :proto :qword
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         HEX$
-; Description:  Converts a 64-bit unsigned integer into its hexadecimal 
-;               string representation ('0'-'9', 'A'-'F') allocated within 
-;               the custom memory arena.
-; Parameters:   num:QWORD - The numeric value to convert
-; Returns:      rax = pointer to the null-terminated hexadecimal string in the arena, 
-;                     or 0 (NULL) if memory allocation fails.
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; HEX$
+;   Converts a QWORD (64-bit unsigned integer) to its hexadecimal 
+;   string representation.
+;
+; Parameters:
+;   num:QWORD - The 64-bit unsigned integer to convert.
+;
+; Returns:
+;   rax = Pointer to a newly allocated string containing the hexadecimal 
+;   representation of num, or null if an error occurs during allocation.
+;==============================================================================
+
 PUBLIC HEX$
 HEX$ PROC USES rbx rcx rdi rsi r12 r13 num:QWORD     
     local scratch[32]:byte     
