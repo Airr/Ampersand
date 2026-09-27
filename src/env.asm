@@ -13,18 +13,21 @@ extrn g_envp    :qword
 	
 .code
 
-PUBLIC ENV$
+;
 ;==============================================================================
 ; ENV$
-;   Looks up an environment variable by name.
+;   Retrieves the value of an environment variable by name.
 ;
 ; Parameters:
-;   namePtr (rdi)  NUL-terminated variable name, e.g. "PATH" (no '=').
+;   namePtr:ptr - Pointer to a string representing the name 
+;   of the environment variable to retrieve.
 ;
 ; Returns:
-;   rax = pointer to the value (just past the '=' in the environment
-;         block, not a copy), or 0 if not found.
+;   rax = Pointer to a string containing the value of the environment variable,
+;         or null if the environment variable is not found.
 ;==============================================================================
+
+PUBLIC ENV$
 ENV$ PROC USES rbx r12 namePtr:ptr
     mov     r8, namePtr             ; r8 = wanted name
     mov     r12, g_envp             ; r12 = walks envp entries
