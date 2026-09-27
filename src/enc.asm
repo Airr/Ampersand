@@ -15,19 +15,20 @@ ENAMETOOLONG    equ 36
 
 .code
 
+;
 ;==============================================================================
 ; ENC$
-;   Returns a new arena-allocated copy of a string enclosed in quotation
-;   marks, or in an optional enclosing character.
+;   Encloses the given source string within a pair of characters
 ;
 ; Parameters:
-;   srcPtr  (rdi)  NUL-terminated source string. Must not be NULL.
-;   encChar (esi)  Enclosing character (ASCII code). 0 = default '"'.
+;   srcPtr:ptr - Pointer to the source string to be enclosed.
+;   encChar:dword - The character used for enclosing (both opening and closing).
 ;
 ; Returns:
-;   rax = pointer to the new NUL-terminated string (length + 2 characters),
-;         or 0 if arena_alloc fails.
+;   rax = Pointer to the newly allocated string containing the enclosed content 
+;   of srcPtr, or null if allocation fails.
 ;==============================================================================
+
 PUBLIC ENC$
 ENC$ PROC USES rbx r12 r13 r14 srcPtr:ptr, encChar:dword
 
