@@ -177,7 +177,18 @@ secure_reset_done:
     ret
 arena_secure_reset endp
 
-; Simple helper utilizing the Linux System V ABI
+
+;==============================================================================
+; ALLOC
+;   Allocates memory from an arena.
+;
+; Parameters:
+;   requested_size:qword - The size of the memory block to allocate in bytes.
+;
+; Returns:
+;   rax = pointer to the allocated memory block, or null if allocation fails.
+;==============================================================================
+
 PUBLIC ALLOC
 ALLOC PROC requested_size:qword
     mov     rdi, requested_size     ; 1st argument -> rdi (Linux ABI)
