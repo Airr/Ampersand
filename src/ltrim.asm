@@ -11,16 +11,21 @@ extrn LEN           :PROC
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         ltrim
-; Description:  Returns a newly arena-allocated string with all leading spaces (32) 
-;               and tabs (9) trimmed from 's', leaving the original string unchanged.
-; Input:        rdi = pointer to source string payload (s)
-; Output:       rax = pointer to new arena-allocated string payload
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; LTRIM$
+;   Trims leading whitespace (spaces and tabs) from a string.
+;
+; Parameters:
+;   srcString:ptr - Pointer to the null-terminated string from which leading 
+;                    whitespace will be removed.
+;
+; Returns:
+;   rax = Pointer to a newly allocated string containing the trimmed string,
+;         or null if an error occurs during allocation.
+;==============================================================================
 
 PUBLIC LTRIM$
-
 LTRIM$ PROC USES rbx r12 r13 r14 r15 srcString:ptr
     local src_str:qword
     local src_len:qword
