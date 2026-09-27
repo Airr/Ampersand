@@ -1,0 +1,24 @@
+AMP_MAIN = 1
+
+include amp.inc
+
+.data
+    test_str db "This is a test string", 0      ; create static string buffer
+.code
+
+main proc argc:dword, argv:ptr
+    local tmpStr:ptr                            ; variable on stack
+    
+    assign tmpStr, strchr, addr test_str, 't'   ; call strch function, assign result to tmpStr var
+    
+    .if tmpStr != 0                             ; check tmpStr
+        puts(tmpStr)                            ; should print: "test string" (from the first LOWERCASE 't')
+        puts("\n")                              ; print linefeed
+    .else                                       ; tmpStr is empty
+        puts("Character not found!\n")          ; print status
+    .endif                                      ; end of IF block
+
+    EXIT(0)                                     ; exit program
+main endp
+
+end

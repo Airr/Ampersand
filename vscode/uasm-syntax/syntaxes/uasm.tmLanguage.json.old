@@ -1,0 +1,48 @@
+{
+  "$schema": "https://githubusercontent.com",
+  "name": "UAsm Assembly",
+  "scopeName": "source.asm.x86.uasm",
+  "fileTypes": ["asm", "inc"],
+  "patterns": [
+    {
+      "match": "\\(",
+      "name": "punctuation.definition.parenthesis.begin"
+    },
+    {
+      "match": "\\)",
+      "name": "punctuation.definition.parenthesis.end"
+    },
+    {
+      "match": "\\[",
+      "name": "punctuation.definition.array.begin"
+    },
+    {
+      "match": "\\]",
+      "name": "punctuation.definition.array.end"
+    },    
+    { "name": "comment.line.semicolon.uasm", "match": ";.*$" },
+    { "name": "string.quoted.double.uasm", "begin": "\"", "end": "\"" },
+    { "name": "string.quoted.single.uasm", "begin": "'", "end": "'" },
+    { "name": "keyword.control.directive.uasm", "match": "(?i)\\b(addr|offset|proc|endp|end|macro|endm|invoke|proto|sizeof|struct|ends|uses|\\[|\\]|union|typedef|assume|segment|ends|org|include|includelib|public|extern|extrn|global|local|syscall)\\b" },
+    { "name": "storage.type.data.uasm", "match": "(?i)\\b(db|dw|dd|df|dq|dt|byte|word|dword|fword|qword|tbyte|real4|real8|real10|equ|textequ|ptr|vararg)\\b" },
+    { "name": "keyword.operator.uasm", "match": "(?i)\\b(dup|offset|addr|ptr|lengthof|sizeof|type|seg)\\b" },
+    { "name": "keyword.control.hll.uasm", "match": "(?i)\\.(if|else|elseif|endif|while|endw|repeat|until|break|continue)\\b" },
+    { "name": "variable.language.register.uasm", "match": "(?i)\\b([a-d][xhl]|ts|di|bp|sp|e[a-d]x|e[s|d]i|e[b|s]p|r[a-d]x|r[s|d]i|r[b|s]p|r[0-9]{1,2}[d|w|b]?|cr[0-4]|dr[0-7]|tr[3-7]|[c-gs]s)\\b" },
+    { "name": "keyword.mnemonic.intel.uasm", "match": "(?i)\\b(mov|push|pop|lea|add|sub|mul|div|imul|idiv|inc|dec|cmp|jmp|je|jne|jg|jge|jl|jle|ja|jae|jb|jbe|jz|jnz|test|neg|movsxd|call|ret|int|nop|shl|shr|sar|and|or|xor|not|test)\\b" },
+    { "name": "constant.numeric.uasm", "match": "\\b([0-9][0-9a-fA-F]*[hH]|[0-9]+[dD]?|[0-1]+[bB]|[0-7]+[oOqQ])\\b" },
+    { "name": "entity.name.function.label.uasm", "match": "^\\s*[a-zA-Z_@?$][a-zA-Z0-9_@?$]*:" },
+    {
+      "name": "support.function.libamp",
+      "match": "(?i)\\b(ALLOC|ASSIGN|CLOSE|FREE|ASC|CLS|epause|EXIT|KILL|INDEXOF|LEN|LOF|OPEN|PRINT|READ|SAVEFILE|SEEK|STRIM|TALLY|WAITKEY)\\b"
+    },
+    {
+      "name": "support.function.libamp",
+      "match": "(?i)\\b(APPEND|APPNAME|APPPATH|arena_alloc|arena_reset|arena_secure_reset|CHR|CLOSE|CLS|CMDCOUNT|CONCAT|COLOR|COMMAND|CURDIR|DIR|DATE|ENV|EXIST|EXIT|EXTRACT|FREELIB|HEX|INDEXOF|INPUT|INSERT|ISODATE|JOIN|KILL|LCASE|LEFT|LEN|LOADFILE|LOADFUNC|LOADLIB|LOF|LPAD|LTRIM|memalloc|memcpy|memfree|MID|NOW|OPEN|PRINT|putn|puts|READ|REMOVE|REPEAT|REPLACE|REVERSE|RIGHT|RPAD|RTRIM|SAVEFILE|SEEK|SHELL|SPLIT|STR|STRL|TALLY|TIME|TRIM|UCASE|WRITE)\\$(?!\\w)"
+    },
+    {
+      "name": "support.function.libamp2",
+      "match": "(?i)\\b(atoi|cls|epause|exit|input|itoa|join$|memalloc|memcpy|memfree|putn|puts|stchr|strcasecmp|strcat|strcmp|strdup|strfree|strjoin|strlen|strlwr|strncat|strncpy|strrev|strstr|strupr)\\b"
+    }    
+  ]
+  
+}

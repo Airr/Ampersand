@@ -1,0 +1,421 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "UAsm Assembly",
+  "scopeName": "source.asm.x86.uasm",
+  "fileTypes": [
+    "asm",
+    "inc"
+  ],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#procedures"
+    },
+    {
+      "include": "#jumps_and_calls"
+    },
+    {
+      "include": "#libamp_string_functions"
+    },
+    {
+      "include": "#libamp_functions"
+    },
+    {
+      "include": "#libamp_macros"
+    },
+    {
+      "include": "#labels"
+    },
+    {
+      "include": "#hll_directives"
+    },
+    {
+      "include": "#section_directives"
+    },
+    {
+      "include": "#conditional_directives"
+    },
+    {
+      "include": "#directives"
+    },
+    {
+      "include": "#storage_types"
+    },
+    {
+      "include": "#storage_modifiers"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#registers"
+    },
+    {
+      "include": "#mnemonics"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#punctuation"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.semicolon.uasm",
+          "match": ";.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.uasm",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.uasm",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.uasm",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.uasm",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "procedures": {
+      "patterns": [
+        {
+          "match": "(?i)^\\s*([a-zA-Z_@?$][a-zA-Z0-9_@?$]*)\\s+(PROC|ENDP)\\b",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.proc.uasm"
+            },
+            "2": {
+              "name": "keyword.control.directive.proc.uasm"
+            }
+          }
+        },
+        {
+          "match": "(?i)^\\s*([a-zA-Z_@?$][a-zA-Z0-9_@?$]*)\\s+(PROTO)\\b",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.proto.uasm"
+            },
+            "2": {
+              "name": "keyword.control.directive.proto.uasm"
+            }
+          }
+        },
+        {
+          "match": "(?i)^\\s*([a-zA-Z_@?$][a-zA-Z0-9_@?$]*)\\s+(MACRO)\\b",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.macro.uasm"
+            },
+            "2": {
+              "name": "keyword.control.directive.macro.uasm"
+            }
+          }
+        },
+        {
+          "match": "(?i)^\\s*([a-zA-Z_@?$][a-zA-Z0-9_@?$]*)\\s+(STRUCT|STRUC|UNION|RECORD|TYPEDEF)\\b",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.struct.uasm"
+            },
+            "2": {
+              "name": "keyword.control.directive.struct.uasm"
+            }
+          }
+        }
+      ]
+    },
+    "jumps_and_calls": {
+      "patterns": [
+        {
+          "match": "(?i)\\b(jo|jno|jb|jc|jnae|jnb|jnc|jae|jz|je|jnz|jne|jbe|jna|jnbe|ja|js|jns|jp|jpe|jnp|jpo|jl|jnge|jnl|jge|jle|jng|jnle|jg|jcxz|jecxz|jrcxz|loop|loope|loopz|loopne|loopnz)\\s+(?:(short|near|far)\\s+)?([a-zA-Z_@?$][a-zA-Z0-9_@?$]*|@[FBfb]|@@)",
+          "captures": {
+            "1": {
+              "name": "keyword.mnemonic.intel.uasm"
+            },
+            "2": {
+              "name": "storage.modifier.uasm"
+            },
+            "3": {
+              "name": "entity.name.function.label.target.uasm entity.name.function.label.uasm"
+            }
+          }
+        },
+        {
+          "match": "(?i)\\b(jmp)\\s+(?:(short|near|far)\\s+(?:ptr\\s+)?)?(?!(?:rax|rbx|rcx|rdx|rsi|rdi|rbp|rsp|r8|r9|r10|r11|r12|r13|r14|r15|eax|ebx|ecx|edx|esi|edi|ebp|esp|r8d|r9d|r10d|r11d|r12d|r13d|r14d|r15d|ax|bx|cx|dx|si|di|bp|sp|r8w|r9w|r10w|r11w|r12w|r13w|r14w|r15w|al|bl|cl|dl|ah|bh|ch|dh|sil|dil|bpl|spl|r8b|r9b|r10b|r11b|r12b|r13b|r14b|r15b|cs|ds|es|fs|gs|ss|rip|eip|ip|qword|dword|word|byte|fword|tbyte|oword|yword|zword|ptr|near|far|short)\\b)([a-zA-Z_@?$][a-zA-Z0-9_@?$]*|@[FBfb]|@@)",
+          "captures": {
+            "1": {
+              "name": "keyword.mnemonic.intel.uasm"
+            },
+            "2": {
+              "name": "storage.modifier.uasm"
+            },
+            "3": {
+              "name": "entity.name.function.label.target.uasm entity.name.function.label.uasm"
+            }
+          }
+        },
+        {
+          "match": "(?i)\\b(call)\\s+(?:(near|far)\\s+(?:ptr\\s+)?)?(?!(?:rax|rbx|rcx|rdx|rsi|rdi|rbp|rsp|r8|r9|r10|r11|r12|r13|r14|r15|eax|ebx|ecx|edx|esi|edi|ebp|esp|r8d|r9d|r10d|r11d|r12d|r13d|r14d|r15d|ax|bx|cx|dx|si|di|bp|sp|r8w|r9w|r10w|r11w|r12w|r13w|r14w|r15w|al|bl|cl|dl|ah|bh|ch|dh|sil|dil|bpl|spl|r8b|r9b|r10b|r11b|r12b|r13b|r14b|r15b|cs|ds|es|fs|gs|ss|rip|eip|ip|qword|dword|word|byte|fword|tbyte|oword|yword|zword|ptr|near|far|short)\\b)([a-zA-Z_@?$][a-zA-Z0-9_@?$]*|@[FBfb]|@@)",
+          "captures": {
+            "1": {
+              "name": "keyword.mnemonic.intel.uasm"
+            },
+            "2": {
+              "name": "storage.modifier.uasm"
+            },
+            "3": {
+              "name": "entity.name.function.call.uasm"
+            }
+          }
+        },
+        {
+          "match": "(?i)\\b(invoke|fcall)\\s+([a-zA-Z_@?$][a-zA-Z0-9_@?$]*)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.directive.uasm"
+            },
+            "2": {
+              "name": "entity.name.function.call.uasm"
+            }
+          }
+        }
+      ]
+    },
+    "libamp_string_functions": {
+      "patterns": [
+        {
+          "name": "support.function.libamp.string.uasm",
+          "match": "(?i)\\b(APPNAME|APPPATH|COMMAND|CONCAT|CURDIR|DATE|DIR|ENC|ENV|EXEPATH|EXTRACT|HEX|INPUT|INSERT|ISODATE|JOIN|LCASE|LEFT|LOADFILE|LPAD|LTRIM|MID|NOW|REMAIN|REMOVE|REPEAT|REPLACE|REVERSE|RIGHT|RPAD|RTRIM|SPLIT|STR|STRL|TIME|TRIM|UCASE|WHERE|WRITE)\\$(?![a-zA-Z0-9_@?$])"
+        }
+      ]
+    },
+    "libamp_functions": {
+      "patterns": [
+        {
+          "name": "support.function.libamp.uasm",
+          "match": "(?i)\\b(ALLOC|arena_alloc|arena_reset|arena_secure_reset|CHR|CLOSE|CLS|CMDCOUNT|COLOR|COMPARE|ENDSWITH|epause|EXIST|EXIT|FREELIB|INDEXOF|KILL|LEN|LOADFUNC|LOADLIB|LOF|memalloc|memcpy|memfree|MKDIR|OPEN|PRINT|putn|puts|READ|SAVEFILE|SEEK|SHELL|SORT|SPRINT|stchr|strcasecmp|strcat|strchr|strcmp|strcopy|strdup|strfree|strjoin|strncat|strncpy|strrev|strstr|TALLY)(?![a-zA-Z0-9_@?$])"
+        }
+      ]
+    },
+    "libamp_macros": {
+      "patterns": [
+        {
+          "name": "entity.name.function.macro.libamp.uasm",
+          "match": "(?i)\\b(assign|FCALL)\\b"
+        }
+      ]
+    },
+    "labels": {
+      "patterns": [
+        {
+          "name": "entity.name.function.label.uasm",
+          "match": "^\\s*([a-zA-Z_@?$][a-zA-Z0-9_@?$]*|@@):"
+        },
+        {
+          "name": "entity.name.label.anonymous.uasm",
+          "match": "\\b(@[FBfb]|@@)\\b"
+        }
+      ]
+    },
+    "hll_directives": {
+      "patterns": [
+        {
+          "name": "keyword.control.hll.uasm",
+          "match": "(?i)\\.(if|else|elseif|endif|while|endw|repeat|until|untilcxz|break|continue)\\b"
+        }
+      ]
+    },
+    "section_directives": {
+      "patterns": [
+        {
+          "name": "keyword.control.directive.section.uasm",
+          "match": "(?i)\\.(code|data|data\\?|const|fardata|fardata\\?|stack|model|radix|dosseg|safeseh|note\\.GNU-stack)\\b"
+        },
+        {
+          "name": "keyword.control.directive.section.uasm",
+          "match": "(?i)`\\.note\\.GNU-stack`"
+        }
+      ]
+    },
+    "conditional_directives": {
+      "patterns": [
+        {
+          "name": "keyword.control.conditional.uasm",
+          "match": "(?i)\\b(if|else|elseif|endif|ifdef|ifndef|ifb|ifnb|ifidn|ifidni|ifdif|ifdifi|ife|if1|if2)\\b"
+        }
+      ]
+    },
+    "directives": {
+      "patterns": [
+        {
+          "name": "keyword.control.directive.uasm",
+          "match": "(?i)\\b(proc|endp|proto|macro|endm|struct|struc|ends|union|typedef|record|comm|org|assume|segment|label|align|even|define|include|includelib|incbin|option|invoke|echo|purge|exitm|goto|catstr|substr|sizestr|instr|textequ|equ|for|forc|irp|irpc|rept|repeat|while|endw|end)\\b"
+        }
+      ]
+    },
+    "storage_modifiers": {
+      "patterns": [
+        {
+          "name": "storage.modifier.uasm",
+          "match": "(?i)\\b(public|extern|extrn|externdef|global|local|uses|frame|flat|near|near16|near32|far|far16|far32|short|stdcall|cdecl|pascal|fastcall|syscall|vectorcall|fortran|basic|readonly|write|execute|readwrite|casemap|literals)\\b"
+        }
+      ]
+    },
+    "storage_types": {
+      "patterns": [
+        {
+          "name": "storage.type.data.uasm",
+          "match": "(?i)\\b(db|dw|dd|df|dq|dt|do|dy|dz|byte|sbyte|word|sword|dword|sdword|fword|qword|sqword|tbyte|oword|yword|zword|mmword|xmmword|ymmword|zmmword|real4|real8|real10|real16|ptr|vararg)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.other.operator.word.uasm",
+          "match": "(?i)\\b(addr|offset|dup|sizeof|lengthof|type|seg|opattr|mask|width|low|high|lowword|highword|low32|high32|lroffset|dot|shl|shr|and|or|xor|not|eq|ne|lt|le|gt|ge)\\b"
+        },
+        {
+          "name": "keyword.other.operator.symbol.uasm",
+          "match": "[+\\-*/%&|^~!=<>]+"
+        }
+      ]
+    },
+    "registers": {
+      "patterns": [
+        {
+          "name": "variable.language.register.general.64bit.uasm",
+          "match": "(?i)\\b(rax|rbx|rcx|rdx|rsi|rdi|rbp|rsp|r8|r9|r10|r11|r12|r13|r14|r15)\\b"
+        },
+        {
+          "name": "variable.language.register.general.32bit.uasm",
+          "match": "(?i)\\b(eax|ebx|ecx|edx|esi|edi|ebp|esp|r8d|r9d|r10d|r11d|r12d|r13d|r14d|r15d)\\b"
+        },
+        {
+          "name": "variable.language.register.general.16bit.uasm",
+          "match": "(?i)\\b(ax|bx|cx|dx|si|di|bp|sp|r8w|r9w|r10w|r11w|r12w|r13w|r14w|r15w)\\b"
+        },
+        {
+          "name": "variable.language.register.general.8bit.uasm",
+          "match": "(?i)\\b(al|bl|cl|dl|ah|bh|ch|dh|sil|dil|bpl|spl|r8b|r9b|r10b|r11b|r12b|r13b|r14b|r15b)\\b"
+        },
+        {
+          "name": "variable.language.register.segment.uasm",
+          "match": "(?i)\\b(cs|ds|es|fs|gs|ss)\\b"
+        },
+        {
+          "name": "variable.language.register.flags.uasm",
+          "match": "(?i)\\b(rip|eip|ip|rflags|eflags|flags)\\b"
+        },
+        {
+          "name": "variable.language.register.control.uasm",
+          "match": "(?i)\\b(cr[0-9]|cr1[0-5]|dr[0-9]|dr1[0-5]|tr[3-7])\\b"
+        },
+        {
+          "name": "variable.language.register.simd.uasm",
+          "match": "(?i)\\b(st\\([0-7]\\)|st|mm[0-7]|xmm([0-9]|[12][0-9]|3[01])|ymm([0-9]|[12][0-9]|3[01])|zmm([0-9]|[12][0-9]|3[01])|k[0-7]|bnd[0-3])\\b"
+        }
+      ]
+    },
+    "mnemonics": {
+      "patterns": [
+        {
+          "name": "keyword.mnemonic.intel.uasm",
+          "match": "(?i)\\b(mov|movzx|movsx|movsxd|movabs|lea|xchg|push|pop|pushf|popf|pushfd|popfd|pushfq|popfq|cbw|cwd|cdq|cqo|cwde|cdqe|cmovo|cmovno|cmovb|cmovc|cmovnae|cmovnb|cmovnc|cmovae|cmovz|cmove|cmovnz|cmovne|cmovbe|cmovna|cmovnbe|cmova|cmovs|cmovns|cmovp|cmovpe|cmovnp|cmovpo|cmovl|cmovnge|cmovnl|cmovge|cmovle|cmovng|cmovnle|cmovg|add|adc|sub|sbb|mul|imul|div|idiv|inc|dec|neg|cmp|daa|das|aaa|aas|aam|aad|and|or|xor|not|test|shl|shr|sal|sar|rol|ror|rcl|rcr|shld|shrd|bsf|bsr|bt|btc|btr|bts|bswap|lzcnt|popcnt|tzcnt|jmp|call|ret|retn|retf|syscall|sysret|int|into|iret|iretd|iretq|loop|loope|loopz|loopne|loopnz|jcxz|jecxz|jrcxz|jo|jno|jb|jc|jnae|jnb|jnc|jae|jz|je|jnz|jne|jbe|jna|jnbe|ja|js|jns|jp|jpe|jnp|jpo|jl|jnge|jnl|jge|jle|jng|jnle|jg|movsb|movsw|movsd|movsq|cmpsb|cmpsw|cmpsd|cmpsq|scasb|scasw|scasd|scasq|lodsb|lodsw|lodsd|lodsq|stosb|stosw|stosd|stosq|rep|repe|repz|repne|repnz|ins|insb|insw|insd|outs|outsb|outsw|outsd|clc|stc|cmc|cld|std|cli|sti|nop|hlt|pause|lock|cpuid|rdtsc|rdtscp|rdrand|rdseed|wbinvd|invlpg|ud2|fld|fst|fstp|fadd|fsub|fmul|fdiv|fcom|fcomp|fcompp|fild|fist|fistp|fchs|fabs|ftst|fxch|fld1|fldz|fldpi|fsqrt|fsin|fcos|fsincos|fpatan|f2xm1|fyl2x|finit|fninit|fclex|fnclex|fstsw|fnstsw|fstcw|fldcw|movaps|movups|movdqa|movdqu|movss|movsd|addps|addss|addpd|addsd|subps|subss|subpd|subsd|mulps|mulss|mulpd|mulsd|divps|divss|divpd|divsd|sqrtps|sqrtss|sqrtpd|sqrtsd|maxps|maxss|maxpd|maxsd|minps|minss|minpd|minsd|ucomiss|ucomisd|comiss|comisd|cvtsi2ss|cvtsi2sd|cvtss2si|cvtsd2si|cvttss2si|cvttsd2si|xorps|xorpd|andps|andpd|orps|orpd|vmovups|vmovaps|vmovdqu|vmovdqa|vxorps|vxorpd|vzeroupper)\\b"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hex.uasm",
+          "match": "(?i)\\b(0x[0-9a-f]+|[0-9][0-9a-f]*h)\\b"
+        },
+        {
+          "name": "constant.numeric.binary.uasm",
+          "match": "(?i)\\b([01]+b|0y[01]+)\\b"
+        },
+        {
+          "name": "constant.numeric.octal.uasm",
+          "match": "(?i)\\b([0-7]+[oq])\\b"
+        },
+        {
+          "name": "constant.numeric.float.uasm",
+          "match": "(?i)\\b([0-9]+\\.[0-9]+([e][+-]?[0-9]+)?r?)\\b"
+        },
+        {
+          "name": "constant.numeric.decimal.uasm",
+          "match": "(?i)\\b([0-9]+d?)\\b"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "keyword.other.bracket.square.uasm",
+          "match": "\\["
+        },
+        {
+          "name": "keyword.other.bracket.square.uasm",
+          "match": "\\]"
+        },
+        {
+          "name": "keyword.other.bracket.parenthesis.uasm",
+          "match": "\\("
+        },
+        {
+          "name": "keyword.other.bracket.parenthesis.uasm",
+          "match": "\\)"
+        },
+        {
+          "name": "keyword.other.bracket.curly.uasm",
+          "match": "\\{"
+        },
+        {
+          "name": "keyword.other.bracket.curly.uasm",
+          "match": "\\}"
+        },
+        {
+          "name": "keyword.other.bracket.angle.uasm",
+          "match": "<"
+        },
+        {
+          "name": "keyword.other.bracket.angle.uasm",
+          "match": ">"
+        },
+        {
+          "name": "keyword.other.punctuation.comma.uasm",
+          "match": ","
+        },
+        {
+          "name": "keyword.other.punctuation.colon.uasm",
+          "match": ":"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,85 @@
+AMP_MAIN = 1
+
+;--------------------------------------------------------------------
+; strdup / strfree - Linux x86-64 (UASM, SysV ABI)
+;
+; Layout of an allocation returned by strdup:
+;
+;     [base]            8-byte header: TOTAL mmap length (header+str+NUL)
+;     [base+8]  <- returned ptr -> duplicated string, NUL-terminated
+;
+; strfree reads that header to know exactly how much to munmap. It
+; never re-scans the string, so it works correctly even if the caller
+; shortens, zeroes, or otherwise mutates the string in place before
+; freeing it -- the freed size always matches what was actually
+; allocated, not whatever the string happens to look like right now.
+;--------------------------------------------------------------------
+
+strdup proc uses rsi rdi rbx r12 r13 str_buf:PTR
+    mov     rsi, str_buf
+    test    rsi, rsi
+    jz      @strdup_null
+
+    mov     r13, rsi            ; save source ptr - untouched by everything below
+
+    ; Step 1: length of source string (excluding NUL)
+    mov     rdi, rsi
+    xor     al, al
+    or      rcx, -1
+    repnz   scasb
+    not     rcx
+    sub     rcx, 1
+    mov     rbx, rcx            ; rbx = strlen(source)
+
+    ; Step 2: mmap 8-byte header + string + NUL terminator
+    mov     rax, 9              ; SYS_mmap
+    xor     rdi, rdi            ; addr = NULL
+    lea     rsi, [rbx + 9]      ; length = header(8) + strlen + NUL(1)
+    mov     rdx, 3              ; PROT_READ | PROT_WRITE
+    mov     r10, 22h            ; MAP_PRIVATE | MAP_ANONYMOUS
+    mov     r8, -1              ; fd = -1
+    xor     r9, r9              ; offset = 0
+    syscall
+
+    test    rax, rax
+    js      @strdup_null
+    cmp     rax, -4095
+    ja      @strdup_null
+
+    mov     r12, rax            ; r12 = mmap base
+
+    ; Step 3: write the header (recompute size; don't lean on syscall
+    ; preserving rsi across the call even though it does on Linux)
+    lea     rdx, [rbx + 9]
+    mov     [r12], rdx
+
+    ; Step 4: copy string data past the header
+    lea     rdi, [r12 + 8]      ; destination = base + header
+    mov     rsi, r13            ; source = saved original pointer
+    mov     rcx, rbx
+    inc     rcx                 ; include NUL terminator
+    rep     movsb
+
+    lea     rax, [r12 + 8]      ; return pointer just past the header
+    ret
+
+    @strdup_null:
+        xor     rax, rax
+    ret
+strdup endp
+
+
+strfree proc uses rdi rsi str_buf:PTR
+    mov     rdi, str_buf
+    test    rdi, rdi
+    jz      @strfree_done
+
+    mov     rsi, [rdi - 8]      ; length = size recorded at alloc time
+    sub     rdi, 8              ; addr = original mmap base (before header)
+
+    mov     rax, 11             ; SYS_munmap
+    syscall
+
+    @strfree_done:
+        ret
+strfree endp

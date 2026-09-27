@@ -1,0 +1,57 @@
+#!/bin/bash
+# build.sh - UASM build script for Linux x86-64
+# Usage: ./build.sh filename (without extension)
+
+clear
+
+# Check if filename was provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 filename {gcc}"
+    echo "Example with LD: $0 test"
+    echo "Example with GCC: $0 test gcc"
+    exit 1
+fi
+
+FILENAME="$1"
+GCC=0
+
+if [ "$2" = "gcc" ]; then
+    GCC=1
+fi
+
+# Check if UASM is installed
+if ! command -v uasm &> /dev/null; then
+    echo "Error: UASM not found. Please install UASM."
+    exit 1
+fi
+
+echo "Assembling ${FILENAME}.asm..."
+uasm -elf64 -q -zcw -I../include -Fo"${FILENAME}.o" "${FILENAME}.asm"
+
+# Check if assembly succeeded
+if [ $? -ne 0 ]; then
+    echo "Assembly failed!"
+    exit 1
+fi
+
+echo "Linking..."
+# gcc -no-pie "${FILENAME}.o" -o "${FILENAME}"
+
+
+if (( GCC )); then
+    cc -o "${FILENAME}" "${FILENAME}.o" ../lib/lamp.a -no-pie -s -ldl
+else
+    ld "${FILENAME}.o"  ../lib/lamp.a -o "${FILENAME}" -e main -s -no-pie
+fi
+# ld --gc-sections "${FILENAME}.o" -dynamic-linker /lib64/ld-linux-x86-64.so.2 -e main -s ../lib/lamp.a --copy-dt-needed-entries /lib/x86_64-linux-gnu/libdl.so.2 -o "${FILENAME}"
+# Check if linking succeeded
+if [ $? -ne 0 ]; then
+    echo "Linking failed!"
+    exit 1
+fi
+
+echo "Build successful!"
+echo "Running ${FILENAME}..."
+echo 
+./"${FILENAME}"
+

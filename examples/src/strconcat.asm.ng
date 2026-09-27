@@ -1,0 +1,104 @@
+AMP_MAIN = 1
+
+;--------------------------------------------------------------------
+; strconcat - concatenate N null-terminated strings (Linux x86-64,
+;             UASM, SysV ABI)
+;
+; in:  str_array = pointer to an array of QWORD string pointers,
+;                  terminated by a NULL (0) entry, e.g.:
+;
+;                      arr dq offset s1, offset s2, offset s3, 0
+;                      invoke strconcat, addr arr
+;
+; out: rax = pointer to the freshly allocated concatenated string,
+;            or 0 if str_array itself is NULL or mmap fails.
+;            An array whose first entry is NULL (empty list) is valid
+;            and returns a non-NULL pointer to an empty string "".
+;
+; Uses the SAME 8-byte size-header layout as strdup (see
+; strdup_strfree.asm), so results from strconcat can be freed with
+; the existing strfree with no changes needed there.
+;
+; Each array entry is read once as an address, but every entry is
+; immediately copied into a callee-saved register (r12/r15) rather
+; than being re-read from its original argument register later -
+; this sidesteps the exact "argument register got clobbered and
+; re-read stale" bug class the original strdup had.
+;--------------------------------------------------------------------
+
+strconcat proc uses rbx r12 r13 r14 r15 str_array:PTR
+    mov     r12, str_array
+    test    r12, r12
+    jz      @strconcat_null
+
+    mov     r13, r12            ; save array start for the second pass
+
+    ; ---- Pass 1: total length of all strings combined ----
+    xor     rbx, rbx            ; rbx = running total length
+@strconcat_len_loop:
+    mov     rax, [r12]
+    test    rax, rax
+    jz      @strconcat_len_done
+    mov     r15, rax            ; r15 = this entry's string pointer
+    mov     rdi, r15
+    xor     al, al
+    or      rcx, -1
+    repnz   scasb
+    not     rcx
+    dec     rcx                 ; rcx = strlen of this entry
+    add     rbx, rcx
+    add     r12, 8              ; next pointer-sized array slot
+    jmp     @strconcat_len_loop
+@strconcat_len_done:
+
+    ; ---- Allocate: 8-byte header + total length + NUL ----
+    mov     rax, 9              ; SYS_mmap
+    xor     rdi, rdi
+    lea     rsi, [rbx + 9]
+    mov     rdx, 3              ; PROT_READ | PROT_WRITE
+    mov     r10, 22h            ; MAP_PRIVATE | MAP_ANONYMOUS
+    mov     r8, -1
+    xor     r9, r9
+    syscall
+
+    test    rax, rax
+    js      @strconcat_null
+    cmp     rax, -4095
+    ja      @strconcat_null
+
+    mov     r14, rax            ; r14 = mmap base
+    lea     rdx, [rbx + 9]
+    mov     [r14], rdx          ; header = total alloc size
+
+    ; ---- Pass 2: copy each string in, back to back ----
+    mov     r12, r13            ; reset array iterator to the start
+    lea     r13, [r14 + 8]      ; repurpose r13 as the destination write cursor
+@strconcat_copy_loop:
+    mov     rax, [r12]
+    test    rax, rax
+    jz      @strconcat_copy_done
+    mov     r15, rax            ; source string pointer for this entry
+    mov     rdi, r15
+    xor     al, al
+    or      rcx, -1
+    repnz   scasb
+    not     rcx
+    dec     rcx                 ; rcx = length of this entry (excl. NUL)
+
+    mov     rsi, r15
+    mov     rdi, r13
+    rep     movsb               ; copy rcx bytes; rdi ends at dest+rcx
+    mov     r13, rdi            ; advance destination cursor
+
+    add     r12, 8
+    jmp     @strconcat_copy_loop
+@strconcat_copy_done:
+
+    mov     byte ptr [r13], 0   ; NUL-terminate the combined result
+    lea     rax, [r14 + 8]      ; return pointer past the header
+    ret
+
+    @strconcat_null:
+        xor     rax, rax
+    ret
+strconcat endp

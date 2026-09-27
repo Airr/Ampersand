@@ -1,0 +1,22 @@
+{
+  "name": "uasm-syntax",
+  "displayName": "UAsm Assembly Syntax",
+  "version": "0.0.1",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "contributes": {
+    "languages": [{
+      "id": "uasm",
+      "aliases": ["UAsm", "uasm"],
+      "extensions": [".asm", ".inc"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "uasm",
+      "scopeName": "source.asm.x86.uasm",
+      "path": "./syntaxes/uasm.tmLanguage.json"
+    }]
+  }
+}

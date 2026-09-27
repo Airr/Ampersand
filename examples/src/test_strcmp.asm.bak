@@ -1,0 +1,52 @@
+AMP_MAIN = 1
+
+include amp.inc
+
+; prototype for 'check_result' proc
+check_result proto :qword
+
+.data
+    test_str1 db "This is a test string", 0      ; create static string buffer
+    test_str2 db "This is a test string", 0      ; create static string buffer
+    test_str3 db "This is another string", 0   ; create static string buffer
+.code
+
+main proc argc:dword, argv:ptr
+    ; local variables on the stack
+    local result:QWORD, tmpMsg:ptr                         
+
+    ; create allocated string and display in terminal
+    assign tmpMsg, join, 5, "Comparing '", addr test_str1, "' and '", addr test_str3, "': "
+    puts(tmpMsg)
+    strfree(tmpMsg) ; free the allocated string so we can reuse the tmpMsg pointer
+                    ; without leaking the memory allocated for it
+
+    ; call strcmp and assign return value to result variable 
+    assign result, strcmp, addr test_str1, addr test_str3 
+    ; check the result                  
+    check_result(result)
+
+    ; create allocated string and display in terminal
+    assign tmpMsg, join, 5, "\nComparing '", addr test_str1, "' and '", addr test_str2, "': "
+    puts(tmpMsg)
+    strfree(tmpMsg) ; free the allocated string so no memory leak
+
+    ; call strcmp and assign return value to result variable    
+    assign result, strcmp, addr test_str1, addr test_str2   
+    ; check the result                
+    check_result(result)                                    
+
+    ; exit program
+    exit(0)                                     
+main endp
+
+check_result proc res:qword
+    .if res == 0
+        puts("Strings Match!\n")                            
+    .else                                       
+        puts("Strings do NOT Match!\n")          
+    .endif     
+    ret
+check_result endp
+
+end
