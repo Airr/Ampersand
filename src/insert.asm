@@ -11,16 +11,21 @@ extrn szEmpty       :byte
 
 .code
 
-; -----------------------------------------------------------------------------
-; char* INSERT$(const char* s, int64_t pos, const char* substr)
-; Returns a newly allocated arena string with 'substr' inserted into 's' at 'pos'.
-; Note: 1-based indexing for BASIC compatibility. If pos <= 1, inserts at start.
-; If pos > len(s), appends at the end.
-; Input:  rdi = pointer to source string payload (s)
-;         rsi = position (INTEGER / int64_t, 1-based)
-;         rdx = pointer to substring payload (substr)
-; Output: rax = pointer to new arena string payload
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; INSERT$
+;   Inserts a substring into another string at a specified position.
+;
+; Parameters:
+;   src:ptr - Pointer to the source string where the substring will be inserted.
+;   position:qword - The 1-based index at which the substring should be inserted.
+;   substring:ptr - Pointer to the substring that will be inserted.
+;
+; Returns:
+;   rax = Pointer to a newly allocated string with the substring inserted,
+;         or null if an error occurs during allocation.
+;==============================================================================
+
 PUBLIC INSERT$
 
 INSERT$ PROC USES rbx r12 r13 r14 r15 src:ptr, position:qword, substring:ptr
