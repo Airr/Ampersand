@@ -2,23 +2,26 @@ OPTION LITERALS:ON
 option casemap:none
 option frame:auto 
 
-extrn arena_alloc   :proto :qword, :ptr
-extrn arena         :qword
-EXTERN strlen       :PROC
-
 `.note.GNU-stack` SEGMENT READONLY WRITE ALIGN(1)
 `.note.GNU-stack` ENDS
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         OPEN
-; Description:  Opens a file path using the Linux sys_open system call (2).
-; Parameters:   rdi = pointer to null-terminated file path string
-;               rsi = flags (e.g., 0 for O_RDONLY, 1 for O_WRONLY, 64 for O_CREAT)
-;               rdx = mode (permissions if creating, e.g., 0644)
-; Returns:      rax = file descriptor (> 0) on success, or negative error code on failure
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; OPEN
+;   Opens a file and returns a file descriptor.
+;
+; Parameters:
+;   filePath:ptr - Pointer to a string containing the path of the file to open.
+;   fileFlags:qword - Flags indicating the mode in which to open the file (e.g., read, write).
+;   fileMode:qword - Permissions to set if creating the file (if applicable).
+;
+; Returns:
+;   rax = File descriptor on success,
+;         a negative error code on failure.
+;==============================================================================
+
 PUBLIC OPEN
 
 OPEN PROC filePath:ptr, fileFlags:qword, fileMode:qword
