@@ -12,16 +12,20 @@ extrn COMPARE       :proto :ptr, :ptr
 
 .code
 
-; =====================================================================
-; Function: ENDSWITH
-; Description: Checks if a string ends with a specific suffix string 
-;              using pure pointer arithmetic and no leading dot labels.
-; Inputs:
-;   src - Pointer to the source string
-;   arg - Pointer to the suffix argument string
+;
+;==============================================================================
+; ENDSWITH
+;   Checks if the source string ends with a given substring.
+;
+; Parameters:
+;   src:ptr - Pointer to the source string.
+;   arg:ptr - Pointer to the substring to check for at the end of the source string.
+;
 ; Returns:
-;   rax - 1 if src ends with arg, 0 otherwise
-; =====================================================================
+;   rax = 1 if the source string ends with the given substring,
+;         0 otherwise or if an error occurs.
+;==============================================================================
+
 PUBLIC ENDSWITH
 ENDSWITH PROC USES rbx r12 r13 r14 src:ptr, arg:ptr
     mov rbx, src        ; rbx = src pointer
