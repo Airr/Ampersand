@@ -1,9 +1,3 @@
-; -----------------------------------------------------------------------------
-; Name:         CLS
-; Description:  Clears the screen, homes the cursor, and wipes the scrollback 
-;               buffer using ANSI escape sequences via pure UASM system calls.
-; C Prototype:  void CLS(void);
-; -----------------------------------------------------------------------------
 OPTION LITERALS:ON
 option casemap:none
 option frame:auto 
@@ -21,6 +15,19 @@ extern puts:proto :PTR
     szAnsiClear     db  ESC, "[H", ESC, "[2J", ESC, "[3J", 0
 
 .code
+
+;
+;==============================================================================
+; CLS
+;   Clears the screen, homes the cursor, and wipes the scrollback buffer 
+;   using ANSI escape sequences via pure UASM system calls.
+;
+; Parameters:
+;   None
+;
+; Returns:
+;   Nothing
+;==============================================================================
 
 PUBLIC CLS
 CLS PROC
