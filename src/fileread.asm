@@ -2,25 +2,27 @@ OPTION LITERALS:ON
 option casemap:none
 option frame:auto 
 
-extrn arena_alloc   :proto :qword, :ptr
-extrn arena         :qword
-EXTERN strlen       :PROC
 
 `.note.GNU-stack` SEGMENT READONLY WRITE ALIGN(1)
 `.note.GNU-stack` ENDS
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         READ
-; Description:  Reads data from an open file descriptor using the Linux 
-;               sys_read system call (0).
-; Parameters:   rdi = file descriptor (fd)
-;               rsi = pointer to destination buffer
-;               rdx = maximum number of bytes to read
-; Returns:      rax = number of bytes read on success, 0 on EOF, 
-;                     or a negative error code on failure
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; READ
+;   Reads data from a file descriptor into a buffer.
+;
+; Parameters:
+;   fileHandle:qword - The file descriptor to read from.
+;   buffer:ptr - Pointer to the buffer where the data will be stored.
+;   numBytes:qword - Number of bytes to read.
+;
+; Returns:
+;   rax = Number of bytes actually read on success,
+;         a negative error code on failure.
+;==============================================================================
+
 PUBLIC READ
 
 READ PROC   fileHandle:qword, buffer:ptr, numBytes:qword
