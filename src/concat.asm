@@ -10,6 +10,20 @@ extrn arena         :qword
 
 .code
 
+;==============================================================================
+; CONCAT$
+;   Concatenates two null-terminated strings and allocates memory from an arena 
+;   to store the result.
+;
+; Parameters:
+;   str1:ptr - Pointer to the first string.
+;   str2:ptr - Pointer to the second string.
+;
+; Returns:
+;   rax = Pointer to the newly allocated string containing the concatenated content
+;    of str1 and str2, or null if allocation fails.
+;==============================================================================
+
 PUBLIC CONCAT$
 CONCAT$ PROC USES rbx r12 r13 r14 r15 str1:ptr, str2:ptr
     mov     r14, str1            ; r14 = s1
