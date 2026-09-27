@@ -7,12 +7,20 @@ option frame:auto
 
 .code
 
-; -----------------------------------------------------------------------------
-; int64_t indexof(const char* haystack, const char* needle)
-; Input:  rdi = pointer to haystack string payload
-;         rsi = pointer to needle null-terminated string
-; Output: rax = 0-based index of first match, or -1 if not found
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; INDEXOF
+;   Searches for the first occurrence of a substring within a string.
+;
+; Parameters:
+;   haystack:ptr - Pointer to the string in which to search.
+;   needle:ptr - Pointer to the substring to search for.
+;
+; Returns:
+;   rax = The 1-based index at which the substring starts,
+;         or -1 if the substring is not found.
+;==============================================================================
+
 PUBLIC INDEXOF
 
 INDEXOF PROC USES rbx r12 r13 r14 r15 haystack:ptr, needle:ptr
