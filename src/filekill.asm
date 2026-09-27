@@ -11,12 +11,20 @@ EXTERN strlen       :PROC
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         KILL
-; Description:  Deletes a file path using the Linux sys_unlink system call (87).
-; Parameters:   rdi = pointer to null-terminated file path string (Linux ABI)
-; Returns:      rax = 0 on success, or a negative error code on failure
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; KILL
+;   Deletes a file or symbolic link.
+;
+; Parameters:
+;   filePath:ptr - Pointer to a string containing the path of the file 
+;                  or symbolic link to delete.
+;
+; Returns:
+;   rax = 0 on success,
+;         a negative error code on failure.
+;==============================================================================
+
 PUBLIC KILL
 
 KILL PROC filePath:ptr
