@@ -319,22 +319,45 @@ format_date ENDP
 
 ; --- Public Entry Points ---
 
+;
+;==============================================================================
+; DATE$
+;   Retrieves the current date in "MM-DD-YYYY" format and returns it as a string.
+;
+; Parameters:
+;   None
+;
+; Returns:
+;   rax = Pointer to the newly allocated string containing the formatted date, 
+;   or null if allocation fails.
+;==============================================================================
 
-
-date PROC
+PUBLIC DATE$
+DATE$ PROC
     xor       rdi, rdi                ; 0 = MM-DD-YYYY format flag
     call      format_date
     ret
-date ENDP
-DATE$ EQU date
+DATE$ ENDP
 
+
+;
+;==============================================================================
+; ISODATE$
+;   Retrieves the current date in "YYYY-MM-DD" ISO format and returns it as a string.
+;
+; Parameters:
+;   None
+;
+; Returns:
+;   rax = Pointer to the newly allocated string containing the formatted date, 
+;   or null if allocation fails.
+;==============================================================================
 
 PUBLIC ISODATE$
-isodate PROC
+ISODATE$ PROC
     mov       rdi, 1                  ; 1 = YYYY-MM-DD format flag
     call      format_date
     ret
-isodate ENDP
-ISODATE$ EQU isodate
+ISODATE$ ENDP
 
 END
