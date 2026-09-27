@@ -7,15 +7,19 @@ option frame:auto
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         EXIST
-; Description:  Checks for the existence of a file path using the Linux 
-;               sys_faccessat system call (269) with AT_FDCWD (-100). Evaluates 
-;               accessibility via F_OK (0) without opening or altering the file.
-; Parameters:   rdi = pointer to null-terminated file path string (Linux ABI)
-; Returns:      rax = 1 (TRUE) if the file exists and is accessible, 
-;                     0 (FALSE) if it does not exist or an error occurs.
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; EXIST
+;   Checks if a file or directory exists at the given path.
+;
+; Parameters:
+;   filePath:ptr - Pointer to a string containing the path to check.
+;
+; Returns:
+;   rax = 1 (TRUE) if the file or directory exists,
+;         0 (FALSE) if it does not exist or an error occurs.
+;==============================================================================
+
 PUBLIC EXIST
 
 EXIST PROC filePath:ptr
