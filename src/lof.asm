@@ -13,16 +13,28 @@ option frame:auto
 `.note.GNU-stack` SEGMENT READONLY WRITE ALIGN(1)
 `.note.GNU-stack` ENDS
 
-.code
-
 ; Constants for Linux Kernel File System Calls
 SYS_OPEN        EQU 2
 SYS_CLOSE       EQU 3
 SYS_FSTAT       EQU 5
 O_RDONLY        EQU 0
 
-PUBLIC LOF
+.code
 
+;
+;==============================================================================
+; LOF
+;   Retrieves the length of a file in bytes.
+;
+; Parameters:
+;   path:ptr - Pointer to the null-terminated string representing the path 
+;              of the file whose length is required.
+;
+; Returns:
+;   rax = Length of the file in bytes if successful, or -1 on failure.
+;==============================================================================
+
+PUBLIC LOF
 LOF PROC USES rbx r12 r13 r14 path:ptr
     local file_desc:qword
     local file_size:qword
