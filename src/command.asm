@@ -11,17 +11,19 @@ extrn szEmpty       :byte
 
 .code
 
+;
 ;==============================================================================
 ; COMMAND$
-;   Returns argv[argnum] (like BCX COMMAND$).
+;   Retrieves a command-line argument from the program's arguments.
 ;
 ; Parameters:
-;   argnum (rdi)  0 = program name, 1 = first argument, ...
+;   argnum:qword - The zero-based index of the desired command-line argument.
 ;
 ; Returns:
-;   rax = pointer to the argument string (not a copy), or 0 if argnum is
-;         out of range or g_argv was never set.
+;   rax = Pointer to the string containing the specified command-line argument,
+;         or null if the specified index is out of bounds or an error occurs.
 ;==============================================================================
+
 PUBLIC COMMAND$
 COMMAND$ PROC argnum:qword
     mov     rax, g_argv             ; rax = argv array base
