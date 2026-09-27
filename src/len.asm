@@ -7,21 +7,20 @@ option frame:auto
 
 .code
 
-PUBLIC LEN
+;
 ;==============================================================================
 ; LEN
-;   Returns the length of a NUL-terminated string (like C strlen).
+;   Calculates the length of a null-terminated string.
 ;
 ; Parameters:
-;   text (rdi)  Pointer to a NUL-terminated string. NULL is accepted.
+;   text:ptr - Pointer to the null-terminated string whose length will be calculated.
 ;
 ; Returns:
-;   rax = string length in bytes (0 for NULL or an empty string).
-;
-; Notes:
-;   - Preserves rsi, rdi, rcx (via USES). Safe to call without saving
-;     registers around it. Clobbers only rax and flags.
+;   rax = Number of characters in the string (excluding the null terminator),
+;         or 0 if the input pointer is null.
 ;==============================================================================
+
+PUBLIC LEN
 LEN PROC USES rsi rdi rcx text:ptr
     mov     rsi, text
     test    rsi, rsi
