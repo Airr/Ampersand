@@ -7,19 +7,21 @@ option frame:auto
 
 .code
 
-; =====================================================================
-; Function: COMPARE
-; Description: Compares two null-terminated strings lexicographically 
-;              using unsigned byte values.
-; Inputs:
-;   rdi - Pointer to the first string (str1)
-;   rsi - Pointer to the second string (str2)
+;==============================================================================
+; COMPARE
+;   Compares two null-terminated strings lexicographically.
+;
+; Parameters:
+;   str1:ptr - Pointer to the first string.
+;   str2:ptr - Pointer to the second string.
+;
 ; Returns:
-;   rax - 0 if strings are identical, 
-;         >0 if str1 is greater than str2, 
-;         <0 if str1 is less than str2
-; ABI: System V AMD64 (Linux)
-; =====================================================================
+;   rax = Result of the comparison:
+;         0 if the strings are equal
+;         Positive value if str1 is lexicographically greater than str2
+;         Negative value if str1 is lexicographically less than str2
+;==============================================================================
+
 PUBLIC COMPARE 
 
 COMPARE PROC str1:ptr, str2:ptr
