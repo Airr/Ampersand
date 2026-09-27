@@ -11,6 +11,22 @@ extrn SORT          :proto :ptr
 
 .code
 
+;
+;==============================================================================
+; DIR$
+;   Returns a pointer to an array of strings representing the files in a directory 
+;
+; Parameters:
+;   dir_path:ptr - Pointer to the directory path string.
+;
+; Returns:
+;   rax = Pointer to the array of strings containing the matching filenames,
+;         or null if allocation fails or no files match.
+;
+; Notes:
+;   The returned array includes a NULL terminator at the end.
+;==============================================================================
+
 PUBLIC DIR$
 DIR$ PROC USES rbx r12 r13 r14 r15 dir_path:PTR
     LOCAL read_buf[65536]:BYTE
