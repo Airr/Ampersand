@@ -8,8 +8,6 @@ extrn arena         :qword
 `.note.GNU-stack` SEGMENT READONLY WRITE ALIGN(1)
 `.note.GNU-stack` ENDS
 
-.code
-
 ; Constants for Linux Kernel File System Calls
 SYS_OPEN        EQU 2
 SYS_CLOSE       EQU 3
@@ -17,15 +15,23 @@ SYS_FSTAT       EQU 5
 SYS_READ        EQU 0
 O_RDONLY        EQU 0
 
-; -----------------------------------------------------------------------------
-; char* LOADFILE$(const char* filepath)
-; Loads an entire file into a newly arena-allocated string.
-; Input:  rdi = pointer to null-terminated file path string
-; Output: rax = pointer to new arena string payload, or NULL on failure
-; -----------------------------------------------------------------------------
+.code
+
+;
+;==============================================================================
+; LOADFILE$
+;   Reads a file into memory and returns its contents as a string.
+;
+; Parameters:
+;   filePath:ptr - Pointer to the null-terminated string representing 
+;   the path of the file to be loaded.
+;
+; Returns:
+;   rax = Pointer to a newly allocated string containing the contents of the file,
+;         or null if an error occurs during file opening, reading, or allocation.
+;==============================================================================
 
 PUBLIC LOADFILE$
-
 LOADFILE$ PROC USES rbx r12 r13 r14 filePath:ptr
     local file_desc:qword
     local file_size:qword
