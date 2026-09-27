@@ -7,6 +7,18 @@ option frame:auto
 
 .code
 
+;
+;==============================================================================
+; LCASE$
+;   Converts all uppercase characters in a string to lowercase.
+;
+; Parameters:
+;   str_buf:ptr - Pointer to the string that will be converted.
+;
+; Returns:
+;   rax = Pointer to the modified string, which is the same as the input string.
+;==============================================================================
+
 PUBLIC LCASE$
 LCASE$ PROC USES rsi rdi str_buf:PTR
     mov     rsi, str_buf
