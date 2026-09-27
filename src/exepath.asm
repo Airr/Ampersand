@@ -1,11 +1,3 @@
-; -----------------------------------------------------------------------------
-; Name:         LOF (Length of File)
-; Description:  Retrieves the size of a file given its file path string.
-;               Mirrors BASIC's LOF function using Linux system calls.
-; C Prototype:  int64_t LOF(const char* filepath);
-; Parameters:   rdi - Pointer to a null-terminated C string (filepath)
-; Returns:      rax - File size in bytes on success, or 0 on failure.
-; -----------------------------------------------------------------------------
 OPTION LITERALS:ON
 option casemap:none
 option frame:auto 
@@ -18,6 +10,20 @@ extrn SPRINT       :proto :PTR, :VARARG
 `.note.GNU-stack` ENDS
 
 .code
+
+;
+;==============================================================================
+; EXEPATH$
+;   Constructs the full path of the executable from the application name and path.
+;
+; Parameters:
+;   None
+;
+; Returns:
+;   rax = Pointer to a string containing the full path of the executable,
+;         or null if an error occurs during construction.
+;==============================================================================
+
 PUBLIC EXEPATH$
 EXEPATH$ PROC USES rbx r12 r13
 
