@@ -16,6 +16,16 @@ PUBLIC APPPATH$
     szProcExe db "/PROC/self/exe", 0
 .code
 
+
+;==============================================================================
+; APPPATH$
+;   Retrieves the path to the current executable.
+;   For example, "/usr/bin/ls" -> "/usr/bin".
+;
+; Returns:
+;   rax = pointer containing the path to the application
+;==============================================================================
+
 APPPATH$ PROC USES rbx r12 r13 r14
     local exeBuf[4096]:byte
 
