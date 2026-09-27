@@ -11,12 +11,19 @@ EXTERN strlen       :PROC
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         CLOSE
-; Description:  Closes an open file descriptor using the Linux sys_close system call (3).
-; Parameters:   rdi = file descriptor (fd) to close
-; Returns:      rax = 0 on success, or negative error code on failure
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; CLOSE
+;   Closes a file descriptor.
+;
+; Parameters:
+;   fileHandle:qword - The file descriptor to close.
+;
+; Returns:
+;   rax = 0 on success,
+;         a negative error code on failure.
+;==============================================================================
+
 PUBLIC CLOSE
 
 CLOSE PROC fileHandle:qword
