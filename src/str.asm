@@ -12,16 +12,20 @@ extrn arena         :qword
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         STR$
-; Description:  Converts a signed 64-bit integer into its decimal string representation 
-;               via an internal stack scratch buffer, allocates matching space in the 
-;               global memory arena, copies the string over, and returns the arena pointer.
-; Parameters:   num = signed 64-bit integer to convert (qword)
-; Returns:      rax = pointer to newly arena-allocated null-terminated string, or NULL on failure
-; -----------------------------------------------------------------------------
-PUBLIC STR$
+;
+;==============================================================================
+; STR$
+;   Converts a 64-bit signed integer into its STRING representation.
+;   Handles positive and negative numbers, as well as zero.
+;
+; Parameters:
+;   num (qword): The signed 64-bit integer to be converted.
+;
+; Returns:
+;   rax: Pointer to the arena-allocated string representing the number.
+;==============================================================================
 
+PUBLIC STR$
 STR$ PROC USES rbx rcx rdi rsi r12 r13 num:QWORD     
     local scratch[32]:byte     
 
