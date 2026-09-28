@@ -11,7 +11,7 @@ option frame:auto
 
 ;
 ;==============================================================================
-; MEMALLOC
+; MEM_ALLOC
 ;   Allocates a block of memory from the system's heap.
 ;
 ; Parameters:
@@ -22,8 +22,8 @@ option frame:auto
 ;         or null if an error occurs during allocation.
 ;==============================================================================
 
-PUBLIC MEMALLOC
-MEMALLOC PROC USES rbx r12 memsize:QWORD
+PUBLIC MEM_ALLOC
+MEM_ALLOC PROC USES rbx r12 memsize:QWORD
     mov     rbx, memsize
     test    rbx, rbx
     jz      @memalloc_fail
@@ -59,6 +59,6 @@ MEMALLOC PROC USES rbx r12 memsize:QWORD
 @memalloc_fail:
     xor     rax, rax
     ret
-MEMALLOC ENDP
+MEM_ALLOC ENDP
 
 end

@@ -9,7 +9,7 @@ option frame:auto
 
 ;
 ;==============================================================================
-; MEMSET
+; MEM_SET
 ;   Sets a block of memory to a specific value.
 ;
 ; Parameters:
@@ -22,8 +22,8 @@ option frame:auto
 ;         indicating the completion of the setting operation.
 ;==============================================================================
 
-PUBLIC MEMSET
-MEMSET PROC USES rdi dest:PTR, val:BYTE, len:QWORD
+PUBLIC MEM_SET
+MEM_SET PROC USES rdi dest:PTR, val:BYTE, len:QWORD
     mov     rdi, dest
     mov     al, val
     mov     rcx, len
@@ -36,5 +36,5 @@ MEMSET PROC USES rdi dest:PTR, val:BYTE, len:QWORD
     @memset_done:
         mov     rax, dest
     ret
-MEMSET ENDP
+MEM_SET ENDP
 end

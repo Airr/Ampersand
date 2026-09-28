@@ -9,7 +9,7 @@ option frame:auto
 
 ;
 ;==============================================================================
-; MEMCOPY
+; MEM_COPY
 ;   Copies a block of memory from one location to another.
 ;
 ; Parameters:
@@ -22,8 +22,8 @@ option frame:auto
 ;         indicating the completion of the copying operation.
 ;==============================================================================
 
-PUBLIC MEMCOPY
-MEMCOPY PROC USES rdi rsi rcx dest:PTR, src:PTR, len:QWORD
+PUBLIC MEM_COPY
+MEM_COPY PROC USES rdi rsi rcx dest:PTR, src:PTR, len:QWORD
     mov     rdi, dest
     mov     rsi, src
     mov     rcx, len
@@ -36,5 +36,5 @@ MEMCOPY PROC USES rdi rsi rcx dest:PTR, src:PTR, len:QWORD
     @memcpy_done:
         mov     rax, dest
     ret
-MEMCOPY ENDP
+MEM_COPY ENDP
 end

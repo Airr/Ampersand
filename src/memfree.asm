@@ -9,7 +9,7 @@ option frame:auto
 
 ;
 ;==============================================================================
-; MEMFREE
+; MEM_FREE
 ;   Frees a block of memory that was previously allocated with MEMALLOC.
 ;
 ; Parameters:
@@ -19,8 +19,8 @@ option frame:auto
 ;   None
 ;==============================================================================
 
-PUBLIC MEMFREE
-MEMFREE PROC USES rsi rdi mem_ptr:PTR
+PUBLIC MEM_FREE
+MEM_FREE PROC USES rsi rdi mem_ptr:PTR
     mov     rdi, mem_ptr
     test    rdi, rdi
     jz      @memfree_done
@@ -35,6 +35,6 @@ MEMFREE PROC USES rsi rdi mem_ptr:PTR
 
 @memfree_done:
     ret
-MEMFREE ENDP
+MEM_FREE ENDP
 
 END
