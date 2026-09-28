@@ -11,15 +11,20 @@ extrn LEN           :proto :ptr
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         RIGHT$
-; Description:  Returns a newly allocated arena string containing the rightmost 'count' characters of 's'
-;               using external LEN  .
-; C Prototype:  char* RIGHT$(const char* s, size_t count);
-; Parameters:   rdi = pointer to source string (s)
-;               rsi = count of characters to extract (qword)
-; Returns:      rax = pointer to new arena-allocated string
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; RIGHT$
+;   Extracts the specified number of characters from the right end of a string.
+;
+; Parameters:
+;   src (ptr): The source string from which to extract the substring.
+;   count (qword): The number of characters to extract from the right side.
+;
+; Returns:
+;   rax: Pointer to a null-terminated string containing the extracted substring. 
+;        If an error occurs or 'count' is zero, returns NULL.
+==============================================================================
+
 PUBLIC RIGHT$
 RIGHT$ PROC USES rbx r12 r13 r14 src:ptr, count:qword
     local src_str:qword
