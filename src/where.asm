@@ -12,16 +12,19 @@ extrn EXIST   :proto  :ptr
 
 .code
 
+;
 ;==============================================================================
 ; WHERE$
-;   Searches the directories in $PATH for an executable name (like which).
+;   Searches for an executable in the system's PATH.
 ;
 ; Parameters:
-;   argv (rdi)  NUL-terminated binary name, e.g. "ffmpeg".
+;   argv (ptr): A pointer to the ASCII string representing the filename to search for.
 ;
 ; Returns:
-;   rax = arena-allocated full path of the first match, or 0 if not found.
+;   rax: Pointer to an arena-allocated string containing the full path of the executable,
+;        or NULL if no such file is found in the PATH directories.
 ;==============================================================================
+
 PUBLIC WHERE$
 WHERE$ PROC USES rbx r12 r13 r14 argv:ptr
     mov     r14, argv
