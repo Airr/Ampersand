@@ -11,18 +11,24 @@ extrn LEN           :proto :ptr
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         RPAD$
-; Description:  Returns a newly allocated arena string with 'fill_char' appended 
-;               'count' times to the right side of 's', using external LEN  .
-; C Prototype:  char* RPAD$(const char* s, int64_t count, char fill_char);
-; Parameters:   rdi = pointer to source string (s)
-;               rsi = count of padding characters to append (int64_t)
-;               rdx = fill character (byte, passed in dl)
-; Returns:      rax = pointer to new arena-allocated string
-; -----------------------------------------------------------------------------
-PUBLIC RPAD$
+;
+;==============================================================================
+; RPAD$
+;   Pads the right side of a string with a specified character until it reaches 
+;   the specified length.
+;
+; Parameters:
+;   src (ptr): The source string to be padded.
+;   count (qword): The total length of the resulting string after padding.
+;   fillChar (byte): The character used for padding.
+;
+; Returns:
+;   rax: Pointer to a null-terminated string containing the original string 
+;        padded with 'fillChar' on the right side. If an error occurs or 
+;        'count' is zero, returns NULL.
+;==============================================================================
 
+PUBLIC RPAD$
 RPAD$ PROC USES rbx r12 r13 r14 r15 src:ptr, count:qword, fillChar:byte
     local src_str:qword
     local fill_count:qword
