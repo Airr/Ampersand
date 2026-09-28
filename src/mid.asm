@@ -4,25 +4,33 @@ option frame:auto
 
 extrn arena_alloc   :proto :qword, :ptr
 extrn arena         :qword
-extrn LEN        :PROC
+extrn LEN           :proto
 
 `.note.GNU-stack` SEGMENT READONLY WRITE ALIGN(1)
 `.note.GNU-stack` ENDS
 
 .code
 
-; -----------------------------------------------------------------------------
-; char* MID$(const char* s, int64_t start, int64_t length)
-; Extracts a substring from 's' starting at 0-based index 'start' for 'length' bytes.
-; Returns a newly arena-allocated string.
-; Input:  rdi = pointer to string payload (s)
-;         rsi = 0-based start index
-;         rdx = number of bytes to extract
-; Output: rax = pointer to new arena-allocated string payload, or NULL on failure
-; -----------------------------------------------------------------------------
+;
+;==============================================================================
+; MID$
+;   Extracts a substring from a source string, starting at a given index and of 
+;   a specified length.
+;
+; Parameters:
+;   srcString:ptr - Pointer to the null-terminated source string 
+;                   from which to extract.
+;   index:qword   - The starting index of the substring in the source string.
+;   numBytes:qword- The number of bytes (characters) to include in 
+;                   the extracted substring.
+;
+; Returns:
+;   rax = Pointer to a newly allocated string containing the extracted substring,
+;         or null if an error occurs during allocation or if the input parameters 
+;         are invalid.
+;==============================================================================
 
 PUBLIC MID$
-
 MID$ PROC USES rbx r12 r13 r14 r15 srcString:ptr, index:qword, numBytes:qword
     local src_str:qword
     local start_idx:qword
