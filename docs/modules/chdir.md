@@ -1,5 +1,8 @@
-### `CHDIR - Change the current working directory to the specified folder.`
+### `CHDIR`
 
+```
+  Change the current working directory to the specified folder.
+```
 #### Parameters:
 ```
   folder (ptr): A pointer to a null-terminated ASCII string representing 
