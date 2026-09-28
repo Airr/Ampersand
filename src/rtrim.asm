@@ -11,16 +11,23 @@ extrn LEN           :proto :ptr
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         RTRIM$
-; Description:  Returns a newly allocated arena string with all trailing spaces (32) 
-;               and tabs (9) trimmed from 's', using external LEN   .
-; C Prototype:  char* RTRIM$(const char* s);
-; Parameters:   rdi = pointer to source string (s)
-; Returns:      rax = pointer to new arena-allocated string
-; -----------------------------------------------------------------------------
-PUBLIC RTRIM$
+;
+;==============================================================================
+; RTRIM$
+;   Removes trailing spaces and tab characters from a given string.
+;
+; Parameters:
+;   srcString (ptr): The source string from which trailing spaces and tabs 
+;                    will be removed.
+;
+; Returns:
+;   rax: Pointer to a null-terminated string containing the trimmed version 
+;        of the source string. 
+;
+;        If an error occurs or the source is empty, returns NULL.
+;==============================================================================
 
+PUBLIC RTRIM$
 RTRIM$ PROC USES rbx r13 r14 r15 srcString:ptr
     local src_ptr:qword
     local orig_len:qword
