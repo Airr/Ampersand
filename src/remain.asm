@@ -7,6 +7,7 @@ extrn LCASE$    :proto :ptr
 extrn TRIM$    :proto :ptr
 extrn REPLACE$  :proto :ptr, :ptr, :ptr
 extrn LEFT$     :proto :ptr, :qword
+extrn LEN       :proto :ptr
 
 `.note.GNU-stack` SEGMENT READONLY WRITE ALIGN(1)
 `.note.GNU-stack` ENDS
@@ -18,19 +19,17 @@ MATCH$ PROTO :ptr, :ptr
 ;
 ;==============================================================================
 ; REMAIN$
-;   Returns the substring of pSource that remains after removing all occurrences
-;   of pMatch.
+;   Returns the substring of pSource starting from the first occurrence of pMatch.
 ;
 ; Parameters:
-;   pSource (ptr): The source string from which to remove matches.
-;   pMatch (ptr): The substring to be removed from the source string.
+;   pSource (ptr): The source string from which to start the substring.
+;   pMatch (ptr): The substring at which to begin the returned substring.
 ;
 ; Returns:
-;   rax: Pointer to a null-terminated string containing the remaining part of pSource
-;        after removing all occurrences of pMatch.
+;   rax: Pointer to a null-terminated string containing the portion of pSource
+;        starting from the first occurrence of pMatch.
 ;
 ;        If an error occurs or no match is found, returns NULL.
-;
 ==============================================================================
 
 PUBLIC REMAIN$
@@ -41,16 +40,15 @@ REMAIN$ PROC USES r12 r13 r14 r15 pSource:ptr, pMatch:ptr
         xor rax, rax
         ret
     .endif
-    mov r12, MATCH$(r14, r15)
+
+    mov r12, MATCH$(r14, r15)     ; line text, beginning at the first match
     .if r12
-        
-        UCASE$(r15) ; Convert to uppercase
-        mov r13, REPLACE$(r12, r15, "")
-        LCASE$(r15)
-        mov r13, REPLACE$(r13, r15, "")
-        mov rax, TRIM$(r13)
+        mov r13, LEN(r15)
+        add r12, r13              ; step over the match itself (first occurrence only)
+        mov rax, TRIM$(r12)
         ret
     .endif
+
     xor rax, rax
     ret
 REMAIN$ endp
