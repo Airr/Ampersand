@@ -291,6 +291,8 @@ dir_second_done:
     mov     rax, 3                    ; sys_close
     mov     rdi, r14
     syscall
+
+    SORT(r12)
     mov     rax, r12
 
     ret
