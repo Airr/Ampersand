@@ -63,6 +63,7 @@ ifndef AMP_INC
 	EXIST 		PROTO	filePath:ptr
 	EXIT 		PROTO	code:qword
 	EXTRACT$ 	PROTO	mainStr:ptr, matchStr:ptr
+	FREELIB 	PROTO 	handle:qword
 	HEX$ 		PROTO	num:QWORD     
 	INDEXOF 	PROTO	haystack:ptr, needle:ptr
 	INPUT$ 		PROTO	msg:ptr
@@ -74,13 +75,14 @@ ifndef AMP_INC
     LEFT$       PROTO   srcString:ptr, numBytes:qword
 	LEN 		PROTO	text:ptr
 	LOADFILE$ 	PROTO	filePath:ptr
+	LOADFUNC 	PROTO 	libHandle:qword, funcname:ptr
 	LOADLIB 	PROTO	filename:ptr
 	LOF 		PROTO	path:ptr
     LPAD$       PROTO   srcString:ptr, fillCount:qword, fillChar:byte
     LTRIM$      PROTO   srcString:ptr
-	memalloc 	PROTO	memsize:QWORD
-	memcpy 		PROTO	dest:PTR, src:PTR, len:QWORD
-	memfree 	PROTO	mem_ptr:PTR
+	MEM_ALLOC 	PROTO	memsize:QWORD
+	MEM_COPY	PROTO	dest:PTR, src:PTR, len:QWORD
+	MEM_FREE 	PROTO	mem_ptr:PTR
 	memset 		PROTO	dest:PTR, val:BYTE, len:QWORD
 	MID$ 		PROTO	srcString:ptr, index:qword, numBytes:qword
 	MKDIR 		PROTO	pathPtr:ptr, dirMode:dword
