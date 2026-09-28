@@ -4,24 +4,30 @@ option frame:auto
 
 extrn arena_alloc   :proto :qword, :ptr
 extrn arena         :qword
-EXTERN LEN          :PROC
+extrn LEN           :PROC
 
 `.note.GNU-stack` SEGMENT READONLY WRITE ALIGN(1)
 `.note.GNU-stack` ENDS
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         TRIM$
-; Description:  Returns a newly arena-allocated string with leading and trailing spaces 
-;               removed, and multiple consecutive spaces between words reduced to a 
-;               single space, using an external LEN   module with zero libc dependencies.
-; C Prototype:  char* TRIM$(const char* s);
-; Parameters:   rdi = pointer to source null-terminated string (s)
-; Returns:      rax = pointer to new arena-allocated string payload
-; -----------------------------------------------------------------------------
-PUBLIC TRIM$
+;
+;==============================================================================
+; TRIM$
+;   Trims leading and trailing whitespace from a string and collapses internal
+;   spaces into a single space.
+;
+; Parameters:
+;   srcString (ptr): A pointer to the source string to be trimmed.
+;
+; Returns:
+;   rax: Pointer to an arena-allocated string with all leading/trailing 
+;        whitespace removed and consecutive internal spaces collapsed. 
+;
+;        If allocation fails, returns NULL.
+;==============================================================================
 
+PUBLIC TRIM$
 TRIM$ PROC USES rbx r12 r13 r14 r15 srcString:ptr
     local src_ptr:qword
     local src_len:qword
