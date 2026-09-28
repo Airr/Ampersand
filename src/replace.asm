@@ -27,7 +27,7 @@ extrn LEN        :proto :ptr
 ;   rax: Pointer to a null-terminated string containing the source string with all 
 ;        occurrences of the pattern replaced by replaceStr. If an error occurs or no 
 ;        replacements are made, returns NULL.
-==============================================================================
+;==============================================================================
 
 PUBLIC REPLACE$
 REPLACE$ PROC USES rbx r12 r13 r14 r15 src:ptr, pattern:ptr, replaceStr:ptr

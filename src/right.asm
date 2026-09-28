@@ -23,7 +23,7 @@ extrn LEN           :proto :ptr
 ; Returns:
 ;   rax: Pointer to a null-terminated string containing the extracted substring. 
 ;        If an error occurs or 'count' is zero, returns NULL.
-==============================================================================
+;==============================================================================
 
 PUBLIC RIGHT$
 RIGHT$ PROC USES rbx r12 r13 r14 src:ptr, count:qword

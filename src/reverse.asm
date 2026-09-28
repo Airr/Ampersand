@@ -22,7 +22,7 @@ extrn LEN           :proto :ptr
 ; Returns:
 ;   rax: Pointer to a null-terminated string containing the reversed version 
 ;        of the source string. If an error occurs or the source is empty, returns NULL.
-==============================================================================
+;==============================================================================
 
 PUBLIC REVERSE$
 REVERSE$ PROC USES rbx r12 r13 r14 src:ptr

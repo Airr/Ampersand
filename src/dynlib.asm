@@ -107,7 +107,7 @@ FREELIB endp
 ;
 ; Notes:
 ;   - This function requires linking against libc with the option "-lc".
-==============================================================================
+;==============================================================================
 
 PUBLIC LOADFUNC
 LOADFUNC PROC libHandle:qword, funcname:ptr

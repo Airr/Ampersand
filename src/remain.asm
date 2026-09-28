@@ -30,7 +30,7 @@ MATCH$ PROTO :ptr, :ptr
 ;        starting from the first occurrence of pMatch.
 ;
 ;        If an error occurs or no match is found, returns NULL.
-==============================================================================
+;==============================================================================
 
 PUBLIC REMAIN$
 REMAIN$ PROC USES r12 r13 r14 r15 pSource:ptr, pMatch:ptr

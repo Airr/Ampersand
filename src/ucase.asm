@@ -17,7 +17,7 @@ option frame:auto
 ;
 ; Returns:
 ;   rax: Pointer to the same string, now containing only uppercase characters.
-==============================================================================
+;==============================================================================
 
 PUBLIC UCASE$
 UCASE$ PROC USES rsi rdi str_buf:PTR
