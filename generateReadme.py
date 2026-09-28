@@ -11,37 +11,46 @@ from pathlib import Path
 # Category classifications for all Ampersand functions and procedures
 CATEGORIES = {
     "1. Memory Management": [
-        "ALLOC", "arena_alloc", "arena_reset", "arena_secure_reset",
-        "CALLOC", "MEM_ALLOC", "MEM_FREE", "MEM_COPY", "MEM_SET", "memset"
+        "ALLOC", "CALLOC", "MEM_ALLOC", "MEM_COPY",
+        "MEM_FREE", "MEM_SET", "arena_alloc", "arena_reset",
+        "arena_secure_reset", "memset"
     ],
     "2. String Manipulation & Slicing": [
-        "LEN", "LEFT$", "RIGHT$", "MID$", "TRIM$", "LTRIM$", "RTRIM$",
-        "LPAD$", "RPAD$", "CONCAT$", "JOIN$", "SPLIT$", "INSERT$",
-        "EXTRACT$", "REMAIN$", "REMOVE$", "REPEAT$", "REPLACE$",
-        "REVERSE$", "strrev", "UCASE$", "LCASE$", "ENC$", "SCOPY"
+        "CONCAT$", "ENC$", "EXTRACT$", "INSERT$",
+        "JOIN$", "LCASE$", "LEFT$", "LEN",
+        "LPAD$", "LTRIM$", "MID$", "REMAIN$",
+        "REMOVE$", "REPEAT$", "REPLACE$", "REVERSE$",
+        "RIGHT$", "RPAD$", "RTRIM$", "SCOPY",
+        "SPLIT$", "TRIM$", "UCASE$"
     ],
     "3. String Search & Comparison": [
-        "COMPARE", "INDEXOF", "strstr", "ENDSWITH", "TALLY"
+        "COMPARE", "ENDSWITH", "INDEXOF", "TALLY",
+        "strstr"
     ],
     "4. Conversion & Formatting": [
-        "STR$", "STRL$", "HEX$", "CHR", "SPRINT"
+        "CHR", "HEX$", "SPRINT", "STR$",
+        "STRL$"
     ],
     "5. Console & Terminal I/O": [
-        "PRINT", "puts", "putn", "INPUT$", "EPAUSE", "CLS", "COLOR"
+        "CLS", "COLOR", "EPAUSE", "INPUT$",
+        "PRINT", "putn", "puts"
     ],
     "6. File & Directory Operations": [
-        "OPEN", "READ", "WRITE$", "SEEK", "CLOSE", "EXIST", "LOF", "KILL",
-        "MKDIR", "CHDIR", "LOADFILE$", "SAVEFILE", "DIR$"
+        "CHDIR", "CLOSE", "DIR$", "EXIST",
+        "KILL", "LOADFILE$", "LOF", "MKDIR",
+        "OPEN", "READ", "RENAME", "SAVEFILE",
+        "SEEK", "WRITE$"
     ],
     "7. Date & Time": [
-        "DATE$", "ISODATE$", "TIME$", "NOW$"
+        "DATE$", "ISODATE$", "NOW$", "TIME$"
     ],
     "8. System, Process & Environment": [
-        "APPNAME$", "APPPATH$", "EXEPATH$", "CURDIR$", "WHERE$", "ENV$",
-        "CMDCOUNT", "COMMAND$", "SHELL", "EXIT"
+        "APPNAME$", "APPPATH$", "CMDCOUNT", "COMMAND$",
+        "CURDIR$", "ENV$", "EXEPATH$", "EXIT",
+        "SHELL", "WHERE$"
     ],
     "9. Dynamic Library Loading (Shared Objects)": [
-        "LOADLIB", "LOADFUNC", "FREELIB"
+        "FREELIB", "LOADFUNC", "LOADLIB"
     ],
     "10. Algorithms & Data Structures": [
         "SORT"
