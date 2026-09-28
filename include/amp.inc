@@ -58,7 +58,7 @@ ifndef AMP_INC
 	ENC$ 		PROTO	srcPtr:ptr, encChar:dword
 	ENDSWITH 	PROTO	src:ptr, arg:ptr
 	ENV$ 		PROTO	namePtr:ptr
-	epause 		PROTO
+	EPAUSE 		PROTO
 	EXEPATH$ 	PROTO
 	EXIST 		PROTO	filePath:ptr
 	EXIT 		PROTO	code:qword

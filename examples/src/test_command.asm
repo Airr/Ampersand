@@ -16,7 +16,7 @@ main proc USES r12
             mov cmdStr, COMMAND$(r12)
             PRINT("Argument Number %d: %s\n", r12, cmdStr)
         .endfor
-        epause()
+        EPAUSE()
         EXIT(0)
     .endif
 

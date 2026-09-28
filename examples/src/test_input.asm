@@ -14,11 +14,11 @@ main proc argc:dword, argv:ptr
 
     .if LEN(answer) > 1                                     ; check if valid string
         PRINT("You Entered: '%s'\n", answer)                ; print the prompt string
-        epause()                                            ; pause program
+        EPAUSE()                                            ; pause program
         EXIT(0)                                             ; clean exit
     .else                                                   ; no input provided, show error
         PRINT("ERROR: You did not provide a valid name.\n") ; print error message 
-        epause()                                            ; pause program
+        EPAUSE()                                            ; pause program
         EXIT(1)                                             ; exit with error code    
     .endif                                                  ; end of IF block
 
