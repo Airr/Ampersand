@@ -1,8 +1,14 @@
-; ==============================================================================
-; Streaming PRINT
 ;
-; UASM x64 / Linux
-; System V AMD64 ABI
+;==============================================================================
+; PRINT
+;   Outputs formatted text to standard output.
+;
+; Parameters:
+;   fmt (pointer): A null-terminated format string specifying the output format.
+;   ...: Variable arguments corresponding to the placeholders in the format string.
+;
+; Returns:
+;   None
 ;
 ; Supports:
 ;   %c   character
@@ -12,9 +18,8 @@
 ;   %u   unsigned decimal
 ;   %x   hexadecimal
 ;
-; The output buffer is 64 KB and is flushed whenever it becomes full.
-; Therefore PRINT is not limited to 64 KB of total output.
-; ==============================================================================
+;==============================================================================
+
 
 OPTION LITERALS:ON
 option casemap:none
@@ -143,8 +148,29 @@ pf_check_buffer ENDP
 ; Additional stack-passed arguments are not currently handled.
 ; ==============================================================================
 
-PUBLIC PRINT
+;
+;==============================================================================
+; PRINT
+;   Outputs formatted text to standard output.
+;
+; Parameters:
+;   fmt (pointer): A null-terminated format string specifying the output format.
+;   ...: Variable arguments corresponding to the placeholders in the format string.
+;
+; Returns:
+;   None
+;
+; Notes:
+;   The function uses a buffer (print_buf) to store formatted text before writing it
+;   to standard output. It supports various format specifiers including %d for integers,
+;   %u for unsigned integers, %x for hexadecimal values, %s for strings, and %% for the literal "%".
+;
+;   For unsupported format specifiers or errors during formatting, the function simply ignores them.
+;   The buffer is flushed to standard output at the end of the formatted text.
+;
+;==============================================================================
 
+PUBLIC PRINT
 PRINT PROC USES rbp r13 r14 r15 fmt:PTR, args:VARARG
 
     LOCAL arg_array[8]:QWORD
