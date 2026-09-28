@@ -65,9 +65,9 @@ include amp.inc
 
 .code
 main proc
-    PRINT "Hello, %s!\n", "Ampersand"
-    xor     rax, rax
-    ret
+    PRINT("Hello, %s!\n", "Ampersand")
+
+    EXIT(0)
 main endp
 end
 ```
