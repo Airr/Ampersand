@@ -13,16 +13,20 @@ extrn arena         :qword
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         TIME$
-; Description:  Returns current local time as "HH:MM:SS AM/PM" via pure Linux syscalls,
-;               automatically resolving the correct local timezone offset by parsing 
-;               /etc/localtime 64-bit TZif transition times without using libc.
-; C Prototype:  char* TIME$(void);
-; Returns:      rax - Pointer to a new arena-allocated string containing the formatted time
-; -----------------------------------------------------------------------------
-PUBLIC TIME$
+;
+;==============================================================================
+; TIME$
+;   Returns the current local time as a string formatted in "HH:MM:SS AM/PM".
+;
+; Parameters:
+;   None.
+;
+; Returns:
+;   rax: Pointer to an arena-allocated string representing the current time,
+;        or NULL if allocation fails.
+;==============================================================================
 
+PUBLIC TIME$
 TIME$ PROC USES rbx r12 r13 r14 r15
     local tv_sec:qword
     local tv_usec:qword
