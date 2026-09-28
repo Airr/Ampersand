@@ -19,34 +19,29 @@ PRINT_BUFSIZE       equ 4096
 
 .code
 
+;
 ;==============================================================================
 ; SPRINT
+;   Formats a string using printf-style formatting and stores the result in an 
+;   arena-allocated buffer.
 ;
-; fmt  = format string
+; Parameters:
+;   fmt (ptr): A null-terminated format string. Supported specifiers are:
+;     %c - character
+;     %% - literal '%'
+;     %s - string
+;     %d - signed decimal integer
+;     %u - unsigned decimal integer
+;     %x - hexadecimal integer (lowercase)
 ;
-; Register-passed variadic arguments (same convention as PRINT):
-;   RSI = argument 1
-;   RDX = argument 2
-;   RCX = argument 3
-;   R8  = argument 4
-;   R9  = argument 5
-;
-; Supports the same specifiers as PRINT: %c %% %s %d %u %x
-; Literal text in the format string is copied through unchanged, exactly
-; as PRINT would write it to stdout - SPRINT instead builds it into a new
-; arena-allocated string.
-;
-; Additional stack-passed arguments are not currently handled (same
-; limitation as PRINT).
+;   ...: Variable arguments corresponding to placeholders in fmt.
 ;
 ; Returns:
-;   rax = pointer to the new arena-allocated string, or 0 if arena_alloc
-;         fails.
+;   rax: Pointer to the formatted string stored in the arena, or NULL if allocation fails.
 ;==============================================================================
 
+
 PUBLIC SPRINT
-
-
 SPRINT PROC USES rbx rbp r12 r13 r14 r15 fmt:PTR, args:VARARG
 
     LOCAL arg_array[8]:QWORD
