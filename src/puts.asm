@@ -7,6 +7,19 @@ option frame:auto
 
 .code
 
+;
+;==============================================================================
+; puts
+;   Prints a string to standard output.
+;
+; Parameters:
+;   text (ptr): Pointer to the null-terminated string to be printed.
+;
+; Returns:
+;   None
+;
+;==============================================================================
+
 PUBLIC puts
 puts PROC text:ptr
     mov     rsi, text
