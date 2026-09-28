@@ -7,7 +7,7 @@ ASFLAGS  = -elf64 -q -zcw -I/usr/local/include
 LD       = gcc
 LDFLAGS  = -no-pie -s -Wl,--as-needed -ldl -nostartfiles -Wl,-e,_start
 
-LIB      = /usr/local/lib/lamp.a
+LIB      = /usr/local/lib/libamp.a
 
 TARGET   = dynlib_test
 SRCS     = dynlib.asm
