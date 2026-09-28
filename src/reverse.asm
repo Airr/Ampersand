@@ -11,16 +11,20 @@ extrn LEN           :proto :ptr
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         REVERSE$
-; Description:  Returns a newly allocated arena string containing the reversed bytes of 's', 
-;               leaving the original string completely unchanged, using external LEN    .
-; C Prototype:  char* REVERSE$(const char* s);
-; Parameters:   rdi = pointer to source string (s)
-; Returns:      rax = pointer to new arena-allocated string
-; -----------------------------------------------------------------------------
-PUBLIC REVERSE$
+;
+;==============================================================================
+; REVERSE$
+;   Reverses the order of characters in a given string.
+;
+; Parameters:
+;   src (ptr): The source string to be reversed.
+;
+; Returns:
+;   rax: Pointer to a null-terminated string containing the reversed version 
+;        of the source string. If an error occurs or the source is empty, returns NULL.
+==============================================================================
 
+PUBLIC REVERSE$
 REVERSE$ PROC USES rbx r12 r13 r14 src:ptr
     local src_ptr:qword
     local str_len:qword
