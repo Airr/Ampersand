@@ -12,17 +12,20 @@ SYS_WRITE       EQU 1
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         SAVEFILE
-; Description:  Saves a null-terminated string to a file, automatically appending 
-;               a newline (line feed, 0x0A) character at the end.
-; C Prototype:  int64_t SAVEFILE(const char* filepath, const char* s);
-; Parameters:   rdi = pointer to null-terminated file path string (filepath)
-;               rsi = pointer to string data (normal C string)
-; Returns:      rax = 1 on success, 0 on failure
-; -----------------------------------------------------------------------------
-PUBLIC SAVEFILE
+;
+;==============================================================================
+; SAVEFILE
+;   Saves the contents of a string to a specified file.
+;
+; Parameters:
+;   filePath (ptr): The path of the file where the string will be saved.
+;   srcString (ptr): The null-terminated string that will be written to the file.
+;
+; Returns:
+;   rax: 1 if successful, 0 otherwise.
+;==============================================================================
 
+PUBLIC SAVEFILE
 SAVEFILE PROC USES rbx r12 r13 r14 filePath:ptr, srcString:ptr
     local filepath_ptr:qword
     local str_ptr:qword
