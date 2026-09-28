@@ -10,16 +10,21 @@ extrn arena         :qword
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         REPEAT$
-; Description:  Returns a new arena-allocated string containing 'Count' occurrences of 'Pattern'.
-; C Prototype:  char* REPEAT$(int count, const char* pattern);
-; Parameters:   rdi - Count (integer number of repetitions)
-;               rsi - Pointer to pattern (null-terminated string)
-; Returns:      rax - Pointer to a new arena-allocated string
-; -----------------------------------------------------------------------------
-PUBLIC REPEAT$
+;
+;==============================================================================
+; REPEAT$
+;   Repeats a given pattern 'count' times.
+;
+; Parameters:
+;   count (qword): The number of times to repeat the pattern.
+;   pattern (ptr): The substring to be repeated.
+;
+; Returns:
+;   rax: Pointer to a null-terminated string containing the repeated pattern.
+;         If an error occurs or 'count' is less than or equal to 0, returns NULL.
+;==============================================================================
 
+PUBLIC REPEAT$
 REPEAT$ PROC USES rbx r12 r13 r14 r15 count:qword, pattern:ptr
     local rep_count:qword
     local pattern_ptr:qword
