@@ -10,16 +10,21 @@ extrn arena         :qword
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         NOW$
-; Description:  Returns current local date and time as "MM/DD/YY HH:MM:SS AM/PM"
-;               via pure Linux syscalls, resolving the correct local timezone offset 
-;               by parsing /etc/localtime transition times without using libc.
-; C Prototype:  char* NOW(void);
-; Returns:      rax - Pointer to a new arena-allocated string containing the formatted timestamp
-; -----------------------------------------------------------------------------
-PUBLIC NOW$
+;
+;==============================================================================
+; NOW$
+;   Retrieves the current date and time in a formatted string.
+;
+; Parameters:
+;   None
+;
+; Returns:
+;   rax =   Pointer to a null-terminated string representing the current date and time
+;           in the format "MM/DD/YY HH:MM:SS AM" or NULL if an error occurs 
+;           during the process.
+;==============================================================================
 
+PUBLIC NOW$
 NOW$ PROC USES rbx r12 r13 r14 r15
     local tv_sec:qword
     local tv_usec:qword
