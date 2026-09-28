@@ -44,6 +44,7 @@ ifndef AMP_INC
 	APPNAME$ 	PROTO
 	APPPATH$ 	PROTO
 	CALLOC 		PROTO	count:qword, elem_size:qword
+	CHDIR 		PROTO	folder:ptr
 	CHR 		PROTO	text:PTR
 	CLOSE 		PROTO	fileHandle:qword
 	CLS 		PROTO
