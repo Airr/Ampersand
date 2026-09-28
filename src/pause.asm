@@ -17,9 +17,31 @@ option frame:auto
 
 
 .code
-PUBLIC epause
 
-epause PROC USES rbx r12 r13 r14 r15
+;
+;==============================================================================
+; EPAUSE
+;   Pauses the execution of a program until the user presses the Enter key.
+;
+; Parameters:
+;   None
+;
+; Returns:
+;   None
+;
+; Notes:
+;   This procedure temporarily modifies the terminal settings to enable raw mode,
+;   allowing character-by-character input without echoing. It then reads characters
+;   from standard input until it encounters an Enter key press ('\n' or '\r'), at which
+;   point it restores the original terminal settings and prints a clean trailing newline.
+;
+;   The procedure does not return any value as it is intended to be used for pausing
+;   the program temporarily without affecting its execution flow.
+;
+;==============================================================================
+
+PUBLIC EPAUSE
+EPAUSE PROC USES rbx r12 r13 r14 r15
     local orig_term[64]:byte
     local new_term[64]:byte
     local key_buf:byte
@@ -93,6 +115,6 @@ _restore_terminal:
     syscall
 
     ret
-epause ENDP
+EPAUSE ENDP
 
 END
