@@ -14,8 +14,26 @@ extrn LEFT$     :proto :ptr, :qword
 MATCH$ PROTO :ptr, :ptr
 
 .code
-PUBLIC REMAIN$
 
+;
+;==============================================================================
+; REMAIN$
+;   Returns the substring of pSource that remains after removing all occurrences
+;   of pMatch.
+;
+; Parameters:
+;   pSource (ptr): The source string from which to remove matches.
+;   pMatch (ptr): The substring to be removed from the source string.
+;
+; Returns:
+;   rax: Pointer to a null-terminated string containing the remaining part of pSource
+;        after removing all occurrences of pMatch.
+;
+;        If an error occurs or no match is found, returns NULL.
+;
+==============================================================================
+
+PUBLIC REMAIN$
 REMAIN$ PROC USES r12 r13 r14 r15 pSource:ptr, pMatch:ptr
     mov r14, pSource
     mov r15, pMatch
