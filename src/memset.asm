@@ -7,8 +7,23 @@ option frame:auto
 
 .code
 
-PUBLIC memset
-memset PROC USES rdi dest:PTR, val:BYTE, len:QWORD
+;
+;==============================================================================
+; MEMSET
+;   Sets a block of memory to a specific value.
+;
+; Parameters:
+;   dest:ptr - Pointer to the destination buffer to be filled with the given value.
+;   val:byte - The byte value to fill the buffer with.
+;   len:qword- The number of bytes in the buffer to set to the given value.
+;
+; Returns:
+;   rax = Pointer to the destination buffer (same as the input dest parameter),
+;         indicating the completion of the setting operation.
+;==============================================================================
+
+PUBLIC MEMSET
+MEMSET PROC USES rdi dest:PTR, val:BYTE, len:QWORD
     mov     rdi, dest
     mov     al, val
     mov     rcx, len
@@ -21,5 +36,5 @@ memset PROC USES rdi dest:PTR, val:BYTE, len:QWORD
     @memset_done:
         mov     rax, dest
     ret
-memset ENDP
+MEMSET ENDP
 end
