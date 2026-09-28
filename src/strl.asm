@@ -3,11 +3,6 @@ OPTION LITERALS:ON
 option casemap:none
 option frame:auto
 
-; extrn dlopen  :PROC
-; extrn dlsym   :PROC
-; extrn dlclose :PROC
-; extrn dlerror :PROC
-; extrn printf  :proto :ptr, :VARARG
 extrn ALLOC   :proto :qword
 
 `.note.GNU-stack` SEGMENT READONLY WRITE ALIGN(1)
@@ -19,8 +14,20 @@ extrn ALLOC   :proto :qword
     
 .code
 
-; STRL$ - Converts a double-precision float to a null-terminated 
-; string allocated within the custom memory arena. Returns pointer in RAX.
+;
+;==============================================================================
+; STRL$
+;   Converts a 64-bit floating-point number into its ASCII representation.
+;   The result is formatted to 6 decimal places.
+;
+; Parameters:
+;   float (real8): The double-precision floating-point number to be converted.
+;
+; Returns:
+;   rax: Pointer to the arena-allocated string representing the number,
+;        or NULL if allocation fails.
+;==============================================================================
+
 PUBLIC STRL$
 STRL$ PROC USES rbx r12 r13 r14 r15 float:REAL8
     local int_part:qword, frac_part:qword, buf_ptr:qword
