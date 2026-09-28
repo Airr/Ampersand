@@ -95,6 +95,7 @@ ifndef AMP_INC
 	READ 		PROTO	fileHandle:qword, buffer:ptr, numBytes:qword
 	REMAIN$ 	PROTO	pSource:ptr, pMatch:ptr
 	REMOVE$ 	PROTO	srcString:ptr, match:ptr
+	RENAME 		PROTO	oldpath:ptr, newpath:ptr
 	REPEAT$ 	PROTO	count:qword, pattern:ptr
 	REPLACE$ 	PROTO	src:ptr, pattern:ptr, replaceStr:ptr
 	REVERSE$ 	PROTO	src:ptr

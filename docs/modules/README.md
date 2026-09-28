@@ -57,6 +57,7 @@
 | [puts.md](puts.md) | `puts` |
 | [remain.md](remain.md) | `REMAIN$` |
 | [remove.md](remove.md) | `REMOVE$` |
+| [rename.md](rename.md) | `RENAME` |
 | [repeat.md](repeat.md) | `REPEAT$` |
 | [replace.md](replace.md) | `REPLACE$` |
 | [reverse.md](reverse.md) | `REVERSE$` |
