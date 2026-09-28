@@ -2,6 +2,8 @@ bin
 lib
 obj
 *.notused
+*.ng
+*.bak
 test.md
 file
 
