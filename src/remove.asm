@@ -10,17 +10,21 @@ extrn arena         :qword
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         REMOVE$
-; Description:  Returns a substring of MainStr with all case-sensitive 
-;               occurrences of the Match string removed, using arena storage and no libc.
-; C Prototype:  char* REMOVE$(const char* mainStr, const char* matchStr);
-; Parameters:   rdi - Pointer to MainStr (null-terminated C string)
-;               rsi - Pointer to MatchStr (null-terminated C string)
-; Returns:      rax - Pointer to a new arena-allocated string with matches removed
-; -----------------------------------------------------------------------------
-PUBLIC REMOVE$
+;
+;==============================================================================
+; REMOVE$
+;   Removes all occurrences of a substring from a given string.
+;
+; Parameters:
+;   srcString (ptr): The source string from which to remove matches.
+;   match (ptr): The substring to be removed from the source string.
+;
+; Returns:
+;   rax: Pointer to the modified string with all occurrences of match removed.
+;         If an error occurs or no matches are found, returns NULL.
+;==============================================================================
 
+PUBLIC REMOVE$
 REMOVE$ PROC USES rbx r12 r13 r14 r15 srcString:ptr, match:ptr
     local main_str:qword
     local match_str:qword
