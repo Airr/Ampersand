@@ -7,18 +7,19 @@ option frame:auto
 
 .code
 
+;
 ;==============================================================================
 ; SORT
-;   Sorts a NULL-terminated array of string pointers in place (ascending,
-;   insertion sort). Only the pointers move; the strings are not touched.
+;   Sorts an array of qwords in ascending order using a simple 
+;   bubble sort algorithm.
 ;
 ; Parameters:
-;   arrPtr (rdi)  Array of qword pointers to NUL-terminated strings,
-;                 ending with a NULL pointer (like argv).
+;   arrPtr (ptr): A pointer to the first element of the array to be sorted.
 ;
 ; Returns:
-;   Nothing. The array is sorted in place.
+;   None. The function sorts the array in place and does not return any value.
 ;==============================================================================
+
 PUBLIC SORT
 SORT PROC USES rbx r12 r13 r14  arrPtr:ptr
 
