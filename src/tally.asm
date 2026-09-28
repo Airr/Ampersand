@@ -9,17 +9,21 @@ extrn LEN        :proto :ptr
 
 .code
 
-; -----------------------------------------------------------------------------
-; Name:         TALLY
-; Description:  Counts occurrences of a regular null-terminated string 'target' 
-;               in a string 's', using external LEN.
-; C Prototype:  int64_t TALLY(const char* s, const char* target);
-; Parameters:   rdi = pointer to source string (s)
-;               rsi = pointer to regular null-terminated C string (target)
-; Returns:      rax = total count of occurrences
-; -----------------------------------------------------------------------------
-PUBLIC TALLY
+;
+;==============================================================================
+; TALLY
+;   Counts the number of non-overlapping occurrences of a substring within 
+;   a given string.
+;
+; Parameters:
+;   srcString (ptr): A null-terminated string where the search is performed.
+;   matchStr (ptr): A null-terminated substring to search for within srcString.
+;
+; Returns:
+;   rax: The number of non-overlapping occurrences of matchStr within srcString.
+;==============================================================================
 
+PUBLIC TALLY
 TALLY PROC USES rbx r12 r13 r14 r15 srcString:ptr, matchStr:ptr
     local src_ptr:qword
     local tgt_ptr:qword
