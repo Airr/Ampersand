@@ -38,9 +38,17 @@ make
 
 ### Build Requirements
 - **Assembler**: [UASM](https://www.terraspace.co.uk/uasm.html) (configured for `-elf64 -q -pie`)
-- **Archiver / Tools**: `ar`, `strip`, `mkdir`
+- **Archiver / Tools**: `ar`, `strip`, `mkdir`, `install`
 
 The resulting static library is output to `lib/libamp.a`.
+
+### Installation
+
+To install the library and header files to standard system paths (`/usr/local/lib` and `/usr/local/include`):
+
+```bash
+sudo make install
+```
 
 ---
 
@@ -50,146 +58,135 @@ The resulting static library is output to `lib/libamp.a`.
 
 | Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`ALLOC` / `arena_alloc`** | `(requestedBytes:qword, arenaDescriptor:ptr) -> rax` | Allocates memory from an arena descriptor using O(1) bump allocation, expanding via `mmap` as needed. |
-| **`arena_reset`** | `(arenaDescriptor:ptr) -> void` | Fast reset: resets arena offset pointers back to 0 without unmapping memory chunks for fast reuse. |
-| **`arena_secure_reset`**| `(arenaDescriptor:ptr) -> void` | Zeroes all payload memory across allocated chunks before resetting offsets. |
-| **`MEM_ALLOC`** | `(size:qword) -> rax` | Allocates a raw heap memory block via anonymous private `mmap`. |
-| **`MEM_FREE`** | `(memPtr:ptr) -> void` | Releases an allocated heap memory block back to the system via `munmap`. |
-| **`MEM_COPY`** | `(dest:ptr, src:ptr, len:qword) -> rax (dest)` | Copies `len` bytes from `src` to `dest`. |
-| **`MEM_SET`** | `(dest:ptr, val:byte, len:qword) -> rax (dest)` | Fills `len` bytes of buffer `dest` with byte `val`. |
-
----
+| **`ALLOC`** | `(requested_size:qword) -> rax` | Allocates memory from an arena. |
+| **`arena_alloc`** | `() -> rax` | Routines and utilities for `arena_alloc`. |
+| **`arena_reset`** | `() -> rax` | Routines and utilities for `arena_reset`. |
+| **`arena_secure_reset`** | `() -> rax` | Routines and utilities for `arena_secure_reset`. |
+| **`CALLOC`** | `(count:qword, elem_size:qword) -> rax` | Routines and utilities for `CALLOC`. |
+| **`MEM_ALLOC`** | `(memsize:QWORD) -> rax` | Allocates a block of memory from the system's heap. |
+| **`MEM_FREE`** | `(mem_ptr:PTR) -> rax` | Frees a block of memory that was previously allocated with MEMALLOC. |
+| **`MEM_COPY`** | `(dest:PTR, src:PTR, len:QWORD) -> rax` | Copies a block of memory from one location to another. |
+| **`MEM_SET`** | `(dest:ptr - Pointer to the destination buffer to be filled with the given value. val:byte - The byte value to fill the buffer with. len:qword- The number of bytes in the buffer to set to the given value.) -> rax` | Sets a block of memory to a specific value. |
+| **`memset`** | `(dest:PTR, val:BYTE, len:QWORD) -> rax` | Routines and utilities for `memset`. |
 
 ### 2. String Manipulation & Slicing
 
-| Function | Signature / Parameters | Description |
+| Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`LEN`** | `(text:ptr) -> rax` | Returns the length in bytes of a null-terminated string. |
-| **`LEFT$`** | `(src:ptr, numBytes:qword) -> rax` | Extracts `numBytes` characters from the left end of the string into an arena-allocated buffer. |
-| **`RIGHT$`** | `(src:ptr, count:qword) -> rax` | Extracts `count` characters from the right end of the string. |
-| **`MID$`** | `(src:ptr, index:qword, numBytes:qword) -> rax` | Extracts a substring starting at 1-based `index` with length `numBytes`. |
-| **`TRIM$`** | `(src:ptr) -> rax` | Trims leading/trailing whitespace (spaces, tabs) and collapses consecutive internal whitespace. |
-| **`LTRIM$`** | `(src:ptr) -> rax` | Removes leading whitespace and tabs from the string. |
-| **`RTRIM$`** | `(src:ptr) -> rax` | Removes trailing whitespace and tabs from the string. |
-| **`LPAD$`** | `(src:ptr, totalLen:qword, fillChar:byte) -> rax` | Pads the left side of a string with `fillChar` to reach `totalLen`. |
-| **`RPAD$`** | `(src:ptr, totalLen:qword, fillChar:byte) -> rax` | Pads the right side of a string with `fillChar` to reach `totalLen`. |
-| **`CONCAT$`** | `(str1:ptr, str2:ptr) -> rax` | Concatenates two null-terminated strings into a new arena-allocated string. |
-| **`JOIN$`** | `(count:qword, s1:ptr, s2:ptr, s3:ptr, s4:ptr, s5:ptr) -> rax` | Joins up to 5 strings into a single string. |
-| **`SPLIT$`** | `(src:ptr, delimiter:ptr) -> rax` | Splits a string by delimiter into a null-terminated array of string pointers. |
-| **`INSERT$`** | `(src:ptr, position:qword, substring:ptr) -> rax` | Inserts a substring at a 1-based position within `src`. |
-| **`EXTRACT$`** | `(mainStr:ptr, matchStr:ptr) -> rax` | Extracts prefix of `mainStr` before the first occurrence of `matchStr`. |
-| **`REMAIN$`** | `(pSource:ptr, pMatch:ptr) -> rax` | Returns substring starting from first occurrence of `pMatch`. |
-| **`REMOVE$`** | `(src:ptr, match:ptr) -> rax` | Removes all occurrences of `match` from `src`. |
-| **`REPEAT$`** | `(count:qword, pattern:ptr) -> rax` | Repeats `pattern` string `count` times. |
-| **`REPLACE$`** | `(src:ptr, pattern:ptr, replaceStr:ptr) -> rax` | Replaces all occurrences of `pattern` with `replaceStr`. |
-| **`REVERSE$`** | `(src:ptr) -> rax` | Returns a newly allocated reversed copy of `src`. |
-| **`UCASE$`** | `(str_buf:ptr) -> rax` | Converts string in place to uppercase. |
-| **`LCASE$`** | `(str_buf:ptr) -> rax` | Converts string in place to lowercase. |
-| **`ENC$`** | `(srcPtr:ptr, encChar:dword) -> rax` | Encloses `srcPtr` inside opening and closing boundary character `encChar`. |
-| **`SCOPY`** | `(src:ptr) -> rax` | Duplicates a null-terminated string into newly allocated buffer. |
-
----
+| **`LEN`** | `(text:ptr) -> rax` | Calculates the length of a null-terminated string. |
+| **`LEFT$`** | `(srcString:ptr, numBytes:qword) -> rax` | Extracts a specified number of characters from the beginning of a string. |
+| **`RIGHT$`** | `(src:ptr, count:qword) -> rax` | Extracts the specified number of characters from the right end of a string. |
+| **`MID$`** | `(srcString:ptr, index:qword, numBytes:qword) -> rax` | Extracts a substring from a source string, starting at a given index and of a specified length. |
+| **`TRIM$`** | `(srcString:ptr) -> rax` | Trims leading and trailing whitespace from a string and collapses internal spaces into a single space. |
+| **`LTRIM$`** | `(srcString:ptr) -> rax` | Trims leading whitespace (spaces and tabs) from a string. |
+| **`RTRIM$`** | `(srcString:ptr) -> rax` | Removes trailing spaces and tab characters from a given string. |
+| **`LPAD$`** | `(srcString:ptr, fillCount:qword, fillChar:byte) -> rax` | Pads a string with a specified character to a given length from the left. |
+| **`RPAD$`** | `(src:ptr, count:qword, fillChar:byte) -> rax` | Pads the right side of a string with a specified character until it reaches the specified length. |
+| **`CONCAT$`** | `(str1:ptr, str2:ptr) -> rax` | Concatenates two null-terminated strings and allocates memory from an arena to store the result. |
+| **`JOIN$`** | `(:qword, :vararg) -> rax` | Joins up to 5 strings into a single string with a delimiter. |
+| **`SPLIT$`** | `(srcString:ptr, delimiterString:ptr) -> rax` | Splits a null-terminated string into an array of substrings based on a delimiter. Tokens are allocated from the arena and stored in a pointer array. |
+| **`INSERT$`** | `(src:ptr, position:qword, substring:ptr) -> rax` | Inserts a substring into another string at a specified position. |
+| **`EXTRACT$`** | `(mainStr:ptr, matchStr:ptr) -> rax` | Extracts a prefix from a string based on a match with another string. If no match is found, returns the entire input string. |
+| **`REMAIN$`** | `(pSource:ptr, pMatch:ptr) -> rax` | Returns the substring of pSource starting from the first occurrence of pMatch. |
+| **`REMOVE$`** | `(srcString:ptr, match:ptr) -> rax` | Removes all occurrences of a substring from a given string. |
+| **`REPEAT$`** | `(count:qword, pattern:ptr) -> rax` | Repeats a given pattern 'count' times. |
+| **`REPLACE$`** | `(src:ptr, pattern:ptr, replaceStr:ptr) -> rax` | Replaces all occurrences of a substring (pattern) within a string with another substring. |
+| **`REVERSE$`** | `(src:ptr) -> rax` | Reverses the order of characters in a given string. |
+| **`strrev`** | `(str_buf:PTR) -> rax` | Routines and utilities for `strrev`. |
+| **`UCASE$`** | `(str_buf:PTR) -> rax` | Converts a given ASCII string into uppercase in place. |
+| **`LCASE$`** | `(str_buf:PTR) -> rax` | Converts all uppercase characters in a string to lowercase. |
+| **`ENC$`** | `(srcPtr:ptr, encChar:dword) -> rax` | Encloses the given source string within a pair of characters. |
+| **`SCOPY`** | `(src:ptr) -> rax` | Copies a null-terminated string into another buffer. |
 
 ### 3. String Search & Comparison
 
-| Function | Signature / Parameters | Description |
+| Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`COMPARE`** | `(s1:ptr, s2:ptr) -> rax` | Lexicographically compares two strings (returns `< 0`, `0`, or `> 0`). |
-| **`INDEXOF`** | `(haystack:ptr, needle:ptr) -> rax` | Finds 1-based index of first occurrence of `needle` in `haystack` (-1 if not found). |
-| **`ENDSWITH`** | `(src:ptr, suffix:ptr) -> rax` | Returns `1` if `src` ends with `suffix`, `0` otherwise. |
-| **`TALLY`** | `(src:ptr, matchStr:ptr) -> rax` | Returns count of non-overlapping occurrences of `matchStr` in `src`. |
-
----
+| **`COMPARE`** | `(str1:ptr, str2:ptr) -> rax` | Compares two null-terminated strings lexicographically. |
+| **`INDEXOF`** | `(haystack:ptr, needle:ptr) -> rax` | Searches for the first occurrence of a substring within a string. |
+| **`strstr`** | `(haystack:PTR, needle:PTR) -> rax` | Routines and utilities for `strstr`. |
+| **`ENDSWITH`** | `(src:ptr, arg:ptr) -> rax` | Checks if the source string ends with a given substring. |
+| **`TALLY`** | `(srcString:ptr, matchStr:ptr) -> rax` | Counts the number of non-overlapping occurrences of a substring within a given string. |
 
 ### 4. Conversion & Formatting
 
-| Function | Signature / Parameters | Description |
+| Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`STR$`** | `(num:qword) -> rax` | Converts a signed 64-bit integer to an ASCII decimal string. |
-| **`STRL$`** | `(floatVal:real8) -> rax` | Converts a 64-bit floating-point value to an ASCII string (6 decimal places). |
-| **`HEX$`** | `(num:qword) -> rax` | Converts a 64-bit unsigned integer to a hexadecimal string. |
-| **`CHR`** | `(strPtr:ptr) -> rax` | Parses an ASCII decimal integer string into its 64-bit integer numeric value. |
-| **`SPRINT`** | `(fmt:ptr, ...VARARG) -> rax` | Formats data according to `fmt` specifiers (`%s`, `%d`, `%u`, `%x`, `%c`, `%%`) into an arena-allocated string. |
-
----
+| **`STR$`** | `(num:QWORD) -> rax` | Converts a 64-bit signed integer into its STRING representation. Handles positive and negative numbers, as well as zero. |
+| **`STRL$`** | `(float:REAL8) -> rax` | Converts a 64-bit floating-point number into its ASCII representation. The result is formatted to 6 decimal places. |
+| **`HEX$`** | `(num:QWORD) -> rax` | Converts a QWORD (64-bit unsigned integer) to its hexadecimal string representation. |
+| **`CHR`** | `(text:PTR) -> rax` | Converts a string representing an integer into the corresponding integer value. |
+| **`SPRINT`** | `(fmt:PTR, args:VARARG) -> rax` | Formats a string using printf-style formatting and stores the result in an arena-allocated buffer. |
 
 ### 5. Console & Terminal I/O
 
-| Function | Signature / Parameters | Description |
+| Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`PRINT`** | `(fmt:ptr, ...VARARG) -> void` | Formatted printing to standard output with internal write buffering (`%s`, `%d`, `%u`, `%x`, `%c`, `%%`). |
-| **`puts`** | `(text:ptr) -> void` | Writes a null-terminated string to stdout. |
-| **`putn`** | `(num:qword) -> void` | Prints a signed 64-bit integer followed by output. |
-| **`INPUT$`** | `(prompt:ptr) -> rax` | Displays `prompt`, reads a line from stdin, and returns an allocated string. |
-| **`EPAUSE`** | `() -> void` | Enables raw terminal mode, pauses until Enter is pressed, and restores terminal mode. |
-| **`CLS`** | `() -> void` | Clears terminal screen, resets cursor to top-left, and wipes scrollback buffer via ANSI escape codes. |
-| **`COLOR`** | `(text:ptr, colorCode:qword) -> rax` | Encloses text with ANSI color codes for terminal display. |
-
----
+| **`PRINT`** | `(fmt:PTR, args:VARARG) -> rax` | Outputs formatted text to standard output. |
+| **`puts`** | `(text:ptr) -> rax` | Prints a string to standard output. |
+| **`putn`** | `(num:QWORD) -> rax` | Prints a number to standard output. |
+| **`INPUT$`** | `(msg:ptr) -> rax` | Reads a line of text from standard input and stores it in an allocated string. |
+| **`EPAUSE`** | `() -> rax` | Pauses the execution of a program until the user presses the Enter key. |
+| **`CLS`** | `() -> void` | Clears the screen, homes the cursor, and wipes the scrollback buffer using ANSI escape sequences via pure UASM system calls. |
+| **`COLOR`** | `(text:ptr, colorcode:qword) -> rax` | Colorizes a given string based on the provided color code. The function allocates memory from an arena and returns a new string with the ANSI escape codes applied. |
 
 ### 6. File & Directory Operations
 
-| Function | Signature / Parameters | Description |
+| Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`OPEN`** | `(filePath:ptr, flags:qword, mode:qword) -> rax` | Opens file via `sys_open` and returns file descriptor (or negative error). |
-| **`READ`** | `(fd:qword, buffer:ptr, numBytes:qword) -> rax` | Reads up to `numBytes` into `buffer` via `sys_read`. |
-| **`WRITE$`** | `(fd:qword, buffer:ptr, numBytes:qword) -> rax` | Writes `numBytes` from `buffer` to descriptor via `sys_write`. |
-| **`SEEK`** | `(fd:qword, offset:qword, whence:qword) -> rax` | Repositions file offset via `sys_lseek`. |
-| **`CLOSE`** | `(fd:qword) -> rax` | Closes open file descriptor via `sys_close`. |
-| **`EXIST`** | `(filePath:ptr) -> rax` | Checks if a file or directory exists via `sys_stat` (returns `1` or `0`). |
-| **`LOF`** | `(filePath:ptr) -> rax` | Returns file length in bytes via `sys_stat` (or `-1` on error). |
-| **`KILL`** | `(filePath:ptr) -> rax` | Deletes a file or symbolic link via `sys_unlink`. |
-| **`MKDIR`** | `(pathPtr:ptr, dirMode:dword) -> rax` | Creates directory and any missing parent directories (`mkdir -p` behavior). |
-| **`LOADFILE$`** | `(filePath:ptr) -> rax` | Reads entire contents of a file into a newly allocated null-terminated string. |
-| **`SAVEFILE`** | `(filePath:ptr, contentStr:ptr) -> rax` | Writes string contents to a file (returns `1` on success, `0` on failure). |
-| **`DIR$`** | `(dirPath:ptr) -> rax` | Reads directory contents (supports wildcards/patterns) and returns a null-terminated array of filename strings. |
-
----
+| **`OPEN`** | `(filePath:ptr, fileFlags:qword, fileMode:qword) -> rax` | Opens a file and returns a file descriptor. |
+| **`READ`** | `(fileHandle:qword, buffer:ptr, numBytes:qword) -> rax` | Reads data from a file descriptor into a buffer. |
+| **`WRITE$`** | `(fileHandle:qword, buffer:ptr, numBytes:qword) -> rax` | Writes data from a buffer to a file descriptor. |
+| **`SEEK`** | `(fileHandle:qword, fileOffset:qword, seekFlags:qword) -> rax` | Sets the file offset of a file descriptor. |
+| **`CLOSE`** | `(fileHandle:qword) -> rax` | Closes a file descriptor. |
+| **`EXIST`** | `(filePath:ptr) -> rax` | Checks if a file or directory exists at the given path. |
+| **`LOF`** | `(path:ptr) -> rax` | Retrieves the length of a file in bytes. |
+| **`KILL`** | `(filePath:ptr) -> rax` | Deletes a file or symbolic link. |
+| **`MKDIR`** | `(pathPtr:ptr, dirMode:dword) -> rax` | Creates a directory and any missing parent directories (like mkdir -p) with the specified path and mode. |
+| **`CHDIR`** | `(folder:ptr) -> rax` | Change the current working directory to the specified folder. |
+| **`LOADFILE$`** | `(filePath:ptr) -> rax` | Reads a file into memory and returns its contents as a string. |
+| **`SAVEFILE`** | `(filePath:ptr, srcString:ptr) -> rax` | Saves the contents of a string to a specified file. |
+| **`DIR$`** | `(dir_path:PTR) -> rax` | Returns a pointer to an array of strings representing the files in a directory. |
 
 ### 7. Date & Time
 
-| Function | Signature / Parameters | Description |
+| Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`DATE$`** | `() -> rax` | Returns current date formatted as `"MM-DD-YYYY"`. |
-| **`TIME$`** | `() -> rax` | Returns current local time formatted as `"HH:MM:SS AM/PM"`. |
-| **`NOW$`** | `() -> rax` | Returns current date and time formatted as `"MM/DD/YY HH:MM:SS AM"`. |
-
----
+| **`DATE$`** | `() -> rax` | Retrieves the current date in "MM-DD-YYYY" format and returns it as a string. |
+| **`ISODATE$`** | `() -> rax` | Retrieves the current date in "YYYY-MM-DD" ISO format and returns it as a string. |
+| **`TIME$`** | `(None.) -> rax` | Returns the current local time as a string formatted in "HH:MM:SS AM/PM". |
+| **`NOW$`** | `() -> rax` | Retrieves the current date and time in a formatted string. |
 
 ### 8. System, Process & Environment
 
-| Function | Signature / Parameters | Description |
+| Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`APPNAME$`** | `() -> rax` | Retrieves executable name from `/proc/self/cmdline` or `argv[0]`. |
-| **`APPPATH$`** | `() -> rax` | Retrieves directory path containing the running executable. |
-| **`EXEPATH$`** | `() -> rax` | Resolves full executable path (combining path and name). |
-| **`CURDIR$`** | `() -> rax` | Returns the current working directory path via `sys_getcwd`. |
-| **`WHERE$`** | `(executableName:ptr) -> rax` | Searches system `PATH` environment directories to find executable location. |
-| **`ENV$`** | `(varName:ptr) -> rax` | Retrieves environment variable value from process environment. |
-| **`CMDCOUNT`** | `() -> rax` | Returns number of command-line arguments. |
-| **`COMMAND$`** | `(argIndex:qword) -> rax` | Retrieves specific command-line argument by 0-based index. |
-| **`SHELL`** | `(cmdStr:ptr) -> rax` | Forks and executes command string via `sys_execve` / `/bin/sh -c` and returns exit status. |
-| **`EXIT`** | `(exitCode:qword) -> void` | Exits process immediately via `sys_exit_group`. |
-
----
+| **`APPNAME$`** | `() -> rax` | Retrieves the name of the current application (usually argv[0]). |
+| **`APPPATH$`** | `() -> rax` | Retrieves the path to the current executable. For example, "/usr/bin/ls" -> "/usr/bin". |
+| **`EXEPATH$`** | `() -> rax` | Constructs the full path of the executable from the application name and path. |
+| **`CURDIR$`** | `() -> rax` | Retrieves the current working directory path and allocates memory from an arena to store it. |
+| **`WHERE$`** | `(argv:ptr) -> rax` | Searches for an executable in the system's PATH. |
+| **`ENV$`** | `(namePtr:ptr) -> rax` | Retrieves the value of an environment variable by name. |
+| **`CMDCOUNT`** | `() -> rax` | Retrieves the number of command-line arguments provided to the program, excluding the executable itself. |
+| **`COMMAND$`** | `(argnum:qword) -> rax` | Retrieves a command-line argument from the program's arguments. |
+| **`SHELL`** | `(cmd_str:ptr) -> rax` | Executes a command in a new process using the system call sys_execve. |
+| **`EXIT`** | `(code:qword) -> rax` | Exits the program with a given exit code. |
 
 ### 9. Dynamic Library Loading (Shared Objects)
 
-*Note: Linking shared libraries requires linking against `libdl` / libc (`-lc`).*
+*Note: Dynamic library routines require linking against `libdl` / libc (`-lc`).*
 
-| Function | Signature / Parameters | Description |
+| Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`LOADLIB`** | `(libPath:ptr) -> rax` | Loads a shared library (`.so`) using `dlopen`. |
-| **`LOADFUNC`** | `(handle:ptr, funcName:ptr) -> rax` | Resolves symbol address from loaded library handle using `dlsym`. |
-| **`FREELIB`** | `(handle:ptr) -> rax` | Closes loaded library handle using `dlclose`. |
-
----
+| **`LOADLIB`** | `(filename:ptr) -> rax` | Loads a shared library using dlopen(). |
+| **`LOADFUNC`** | `(libHandle:qword, funcname:ptr) -> rax` | Retrieves a function pointer from a previously loaded shared library using dlsym(). |
+| **`FREELIB`** | `(handle:qword) -> rax` | Closes a previously loaded shared library using dlclose(). |
 
 ### 10. Algorithms & Data Structures
 
-| Function | Signature / Parameters | Description |
+| Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`SORT`** | `(arrPtr:ptr) -> void` | Sorts a null-terminated / length-bounded array of 64-bit QWORD values in place (ascending order). |
+| **`SORT`** | `(arrPtr:ptr) -> rax` | Sorts an array of qwords in ascending order using a simple bubble sort algorithm. |
 
 ---
 
