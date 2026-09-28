@@ -7,6 +7,7 @@
 | [appname.md](appname.md) | `APPNAME$` |
 | [apppath.md](apppath.md) | `APPPATH$` |
 | [arena.md](arena.md) | `ALLOC` |
+| [chdir.md](chdir.md) | `CHDIR - Change the current working directory to the specified folder.` |
 | [chr.md](chr.md) | `CHR` |
 | [cls.md](cls.md) | `CLS` |
 | [cmdcount.md](cmdcount.md) | `CMDCOUNT` |
