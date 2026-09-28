@@ -7,13 +7,20 @@ option frame:auto
 
 .code
 
-; -----------------------------------------------------------------------------
-; memfree - Releases a memory block managed by the 8-byte header architecture
-; Input:  mem_ptr (PTR) - pointer returned by memalloc or strdup
-; Output: None
-; -----------------------------------------------------------------------------
-PUBLIC memfree
-memfree PROC USES rsi rdi mem_ptr:PTR
+;
+;==============================================================================
+; MEMFREE
+;   Frees a block of memory that was previously allocated with MEMALLOC.
+;
+; Parameters:
+;   mem_ptr:ptr - Pointer to the block of memory to be freed.
+;
+; Returns:
+;   None
+;==============================================================================
+
+PUBLIC MEMFREE
+MEMFREE PROC USES rsi rdi mem_ptr:PTR
     mov     rdi, mem_ptr
     test    rdi, rdi
     jz      @memfree_done
@@ -28,6 +35,6 @@ memfree PROC USES rsi rdi mem_ptr:PTR
 
 @memfree_done:
     ret
-memfree ENDP
+MEMFREE ENDP
 
 END
