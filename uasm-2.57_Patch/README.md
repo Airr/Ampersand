@@ -32,10 +32,10 @@ The patch updates `write_relocs64()` in `elf.c` so that **all** external 32-bit 
 
 ## How to Apply & Build
 
-### Step 1: Clone UASM (2.57 Branch)
+### Step 1: Clone UASM (My forked 2.57 Branch with PIE fix)
 
 ```bash
-git clone https://github.com/Terraspace/UASM.git
+git clone https://github.com/Airr/UASM.git
 cd UASM
 git checkout v2.57  # or switch to the 2.57 release branch / tag
 ```

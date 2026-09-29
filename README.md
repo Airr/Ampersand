@@ -37,8 +37,7 @@ make
 ```
 
 ### Build Requirements
-- **Assembler**: [UASM](https://www.terraspace.co.uk/uasm.html) (configured for `-elf64 -q -pie`)
-  with patch file in the 'uasm-2.57_Patch' folder applied, or replacing the 'elf.c' file with the renamed 'elf.c.patched' file.
+- **Assembler**: [UASM](https://github.com/Airr/UASM) (my updated fork with PIE fix)
 - **Archiver / Tools**: `ar`, `strip`, `mkdir`, `install`
 
 The resulting static library is output to `lib/libamp.a`.
