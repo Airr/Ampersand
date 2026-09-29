@@ -192,7 +192,7 @@ arena_secure_reset endp
 PUBLIC ALLOC
 ALLOC PROC requested_size:qword
     mov     rdi, requested_size     ; 1st argument -> rdi (Linux ABI)
-    mov     rsi, offset arena       ; 2nd argument -> rsi (Linux ABI)
+    lea     rsi, arena              ; 2nd argument -> rsi (Linux ABI)
     call    arena_alloc             ; Direct register call
     ret
 ALLOC endp

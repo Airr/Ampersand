@@ -108,10 +108,10 @@ link proc USES r12 r13 r14 fName:ptr
 
     .if useGcc
         PRINT("Linking with GCC...\n")
-         mov r14, SPRINT("%s %s.o -o %s /usr/local/lib/libamp.a -ldl %s -no-pie -s -Wl,--as-needed -nostartfiles -Wl,-e,_start", linker, r12, r12, gccOptions)
+         mov r14, SPRINT("%s %s.o -o %s /usr/local/lib/libamp.a -ldl %s -pie -s -Wl,--as-needed -nostartfiles -Wl,-e,_start", linker, r12, r12, gccOptions)
     .else
         PRINT("Linking with LD...\n")
-        mov r14, SPRINT("%s %s.o /usr/local/lib/libamp.a -o %s -s -no-pie -e _start", linker, r12, r12)
+        mov r14, SPRINT("%s %s.o /usr/local/lib/libamp.a -o %s -s -pie --no-dynamic-linker  -e _start", linker, r12, r12)
     .endif
 
     mov result, SHELL(r14)

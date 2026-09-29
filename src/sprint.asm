@@ -84,27 +84,19 @@ sp_handlearg:
     INC     r13
     MOV     al, [r13]
 
-    .SWITCH al
-
-        .CASE 'c'
-            JMP sp_handle_char
-
-        .CASE '%'
-            JMP sp_handle_percent
-
-        .CASE 's'
-            JMP sp_handle_string
-
-        .CASE 'd', 'u'
-            JMP sp_handle_decimal
-
-        .CASE 'x'
-            JMP sp_handle_hex
-
-        .DEFAULT
-            JMP sp_unsupported
-
-    .ENDSWITCH
+    .if al == 'c'
+        JMP sp_handle_char
+    .elseif al == '%'
+        JMP sp_handle_percent
+    .elseif al == 's'
+        JMP sp_handle_string
+    .elseif al == 'd' || al == 'u'
+        JMP sp_handle_decimal
+    .elseif al == 'x'
+        JMP sp_handle_hex
+    .else
+        JMP sp_unsupported
+    .endif
 
 sp_handle_decimal:
     MOV     rdi, [r15]

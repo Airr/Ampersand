@@ -32,18 +32,18 @@ directories:
 # Pattern rule to assemble any .asm file into .o
 $(OBJDIR)/%.o: $(SRCDIR)/%.asm
 	@echo "Assembling $(notdir $<)..."
-	@uasm -elf64 -q -zcw -I$(INCLUDE) -Fo$@ $<
+	@uasm -elf64 -q -pie -zcw -I$(INCLUDE) -Fo$@ $<
 
 # Pattern rule to link using GCC if USE_GCC=1
 ifeq ($(USE_GCC),1)
 $(BINDIR)/%: $(OBJDIR)/%.o
 	@echo "Linking $(notdir $@) with cc...\n"
-	@cc -o $@ $< $(LIB) -no-pie -s -Wl,--as-needed -ldl -nostartfiles -Wl,-e,_start
+	@cc -o $@ $< $(LIB) -pie -s -Wl,--as-needed -ldl -nostartfiles -Wl,-e,_start
 else
 # Pattern rule to link using LD by default
 $(BINDIR)/%: $(OBJDIR)/%.o
 	@echo "Linking $(notdir $@) with ld...\n"
-	@ld $< $(LIB) -o $@ -s -no-pie -e _start
+	@ld $< $(LIB) -o $@ -s -pie --no-dynamic-linker -e _start
 endif
 
 # Clean both object files and binaries directories

@@ -244,27 +244,19 @@ pf_handlearg:
 
     MOV     al, [r13]
 
-    .SWITCH al
-
-        .CASE 'c'
-            JMP pf_handle_char
-
-        .CASE '%'
-            JMP pf_handle_percent
-
-        .CASE 's'
-            JMP pf_handle_string
-
-        .CASE 'd', 'u'
-            JMP pf_handle_decimal
-
-        .CASE 'x'
-            JMP pf_handle_hex
-
-        .DEFAULT
-            JMP pf_unsupported
-
-    .ENDSWITCH
+    .if al == 'c'
+        JMP pf_handle_char
+    .elseif al == '%'
+        JMP pf_handle_percent
+    .elseif al == 's'
+        JMP pf_handle_string
+    .elseif al == 'd' || al == 'u'
+        JMP pf_handle_decimal
+    .elseif al == 'x'
+        JMP pf_handle_hex
+    .else
+        JMP pf_unsupported
+    .endif
 
 
 ; ==============================================================================

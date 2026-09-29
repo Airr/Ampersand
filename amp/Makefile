@@ -2,10 +2,10 @@
 # linked against the static support library /usr/local/lib/lamp.a
 
 AS       = uasm
-ASFLAGS  = -elf64 -q -zcw -I/usr/local/include
+ASFLAGS  = -elf64 -q -pie -zcw -I/usr/local/include
 
 LD       = ld
-LDFLAGS  = -s -no-pie -e _start
+LDFLAGS  = -s -pie --no-dynamic-linker -e _start
 
 LIB      = /usr/local/lib/libamp.a
 
