@@ -1,0 +1,58 @@
+diff --git a/elf.c b/elf.c
+index a8d612e..e77d3fe 100644
+--- a/elf.c
++++ b/elf.c
+@@ -11,6 +11,7 @@
+ 
+ #include <ctype.h>
+ #include <time.h>
++#include <stdio.h>
+ 
+ #include "globals.h"
+ #include "memalloc.h"
+@@ -1155,29 +1156,25 @@ static void write_relocs64( struct dsym *curr )
+         DebugMsg(("write_relocs64(): reloc loc=%X type=%u idx=%u sym=%s ofs=%X addbyt=%u\n",
+                   fixup->locofs, fixup->type, fixup->sym->ext_idx, fixup->sym->name, fixup->offset, fixup->addbytes ));
+         switch ( fixup->type ) {
+-        case FIX_RELOFF32:
+-#if 0  /* v2.07: activate if the section's index is to be used as symtab ref */
+-            if ( fixup->sym->segment != &curr->sym ) {
+-                //printf("PC-relative fixup to another section: %s\n", fixup->sym->name );
+-                reloc64.r_addend += fixup->sym->offset;
+-                symidx = fixup->sym->segment->ext_idx;
+-            }
+-#endif
+-            reloc64.r_addend += *(int_32*)(curr->e.seginfo->CodeBuffer + fixup->locofs);
+-            elftype = R_X86_64_PC32;
+-
+-		    /*
+-		     * ELF64 external CALLs use PLT32 so they can be linked
+-		     * into PIE executables. Other PC-relative references remain PC32.
+-		     */            
+-		    if (fixup->option == OPTJ_CALL &&
+-		        fixup->sym != NULL &&
+-		        fixup->sym->state == SYM_EXTERNAL) {
++
++		case FIX_RELOFF32:
++
++		#if 0
++		    if ( fixup->sym->segment != &curr->sym ) {
++		        //printf("PC-relative fixup to another section: %s\n", fixup->sym->name );
++		        reloc64.r_addend += fixup->sym->offset;
++		        symidx = fixup->sym->segment->ext_idx;
++		    }
++		#endif
++		    reloc64.r_addend += *(int_32*)(curr->e.seginfo->CodeBuffer + fixup->locofs);
++
++		    if ( fixup->sym->state == SYM_EXTERNAL ) {
+ 		        elftype = R_X86_64_PLT32;
+ 		    } else {
+ 		        elftype = R_X86_64_PC32;
+-		    }		     
+-            break;
++		    }
++		    break;
++    
+         case FIX_OFF64:        elftype = R_X86_64_64;          break;
+         //case FIX_???:        elftype = R_X86_64_GOT32;       break;
+         //case FIX_???:        elftype = R_X86_64_PLT32;       break;
