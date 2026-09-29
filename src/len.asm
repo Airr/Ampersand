@@ -22,22 +22,34 @@ option frame:auto
 
 PUBLIC LEN
 LEN PROC USES rsi rdi rcx text:ptr
-    mov     rsi, text
-    test    rsi, rsi
-    jz      strlen_zero         ; Guard against NULL pointer
-
-    mov     rdi, rsi            ; rdi required by scasb
-    xor     al, al              ; Clear al to search for null terminator (0)
-    or      rcx, -1             ; Initialize rcx to -1 (max countdown)
-    repnz   scasb               ; Hardware-accelerated byte scan loop
-
-    not     rcx                 ; Invert bits to convert countdown to positive count
-    sub     rcx, 1              ; Subtract 1 to exclude the null terminator
-    mov     rax, rcx            ; Return length in rax
-    ret
-
-    strlen_zero:
-        xor     rax, rax        ; Return 0 for NULL inputs
+    mov     rdi, text
+    .if rdi == 0                        ; NULL guard, same as LEN
+        xor     eax, eax
+        ret
+    .endif
+    mov     rax, rdi
+    and     rax, -16                    ; start of the aligned block holding text
+    pxor    xmm0, xmm0
+    movdqa  xmm1, [rax]
+    pcmpeqb xmm1, xmm0
+    pmovmskb edx, xmm1                  ; bit i set = byte i of the block is NUL
+    mov     ecx, edi
+    and     ecx, 15                     ; offset of text inside the block
+    shr     edx, cl                     ; drop bytes that come before text
+    .if edx != 0
+        bsf     eax, edx                ; first NUL, already relative to text
+        ret
+    .endif
+    .while 1
+        add     rax, 16                 ; next aligned block
+        movdqa  xmm1, [rax]
+        pcmpeqb xmm1, xmm0
+        pmovmskb edx, xmm1
+        .break .if edx != 0
+    .endw
+    bsf     edx, edx
+    add     rax, rdx                    ; address of the NUL
+    sub     rax, rdi                    ; minus start = length
     ret
 LEN endp
 end
