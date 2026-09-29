@@ -64,10 +64,6 @@ sudo make install
 | **`MEM_COPY`** | `(dest:PTR, src:PTR, len:QWORD) -> rax` | Copies a block of memory from one location to another. |
 | **`MEM_FREE`** | `(mem_ptr:PTR) -> rax` | Frees a block of memory that was previously allocated with MEMALLOC. |
 | **`MEM_SET`** | `(dest:ptr - Pointer to the destination buffer to be filled with the given value. val:byte - The byte value to fill the buffer with. len:qword- The number of bytes in the buffer to set to the given value.) -> rax` | Sets a block of memory to a specific value. |
-| **`arena_alloc`** | `() -> rax` | Routines and utilities for `arena_alloc`. |
-| **`arena_reset`** | `() -> rax` | Routines and utilities for `arena_reset`. |
-| **`arena_secure_reset`** | `() -> rax` | Routines and utilities for `arena_secure_reset`. |
-| **`memset`** | `(dest:PTR, val:BYTE, len:QWORD) -> rax` | Routines and utilities for `memset`. |
 
 ### 2. String Manipulation & Slicing
 
@@ -105,7 +101,6 @@ sudo make install
 | **`ENDSWITH`** | `(src:ptr, arg:ptr) -> rax` | Checks if the source string ends with a given substring. |
 | **`INDEXOF`** | `(haystack:ptr, needle:ptr) -> rax` | Searches for the first occurrence of a substring within a string. |
 | **`TALLY`** | `(srcString:ptr, matchStr:ptr) -> rax` | Counts the number of non-overlapping occurrences of a substring within a given string. |
-| **`strstr`** | `(haystack:PTR, needle:PTR) -> rax` | Routines and utilities for `strstr`. |
 
 ### 4. Conversion & Formatting
 

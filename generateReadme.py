@@ -12,8 +12,7 @@ from pathlib import Path
 CATEGORIES = {
     "1. Memory Management": [
         "ALLOC", "CALLOC", "MEM_ALLOC", "MEM_COPY",
-        "MEM_FREE", "MEM_SET", "arena_alloc", "arena_reset",
-        "arena_secure_reset", "memset"
+        "MEM_FREE", "MEM_SET"
     ],
     "2. String Manipulation & Slicing": [
         "CONCAT$", "ENC$", "EXTRACT$", "INSERT$",
@@ -24,8 +23,7 @@ CATEGORIES = {
         "SPLIT$", "TRIM$", "UCASE$"
     ],
     "3. String Search & Comparison": [
-        "COMPARE", "ENDSWITH", "INDEXOF", "TALLY",
-        "strstr"
+        "COMPARE", "ENDSWITH", "INDEXOF", "TALLY"
     ],
     "4. Conversion & Formatting": [
         "ASC", "CHR$","HEX$", "SPRINT", "STR$",
