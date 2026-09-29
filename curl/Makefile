@@ -2,12 +2,12 @@
 # linked against the static support library /usr/local/lib/lamp.a
 
 AS       = uasm
-ASFLAGS  = -elf64 -q -zcw -I/usr/local/include
+ASFLAGS  = -elf64 -q -pie -zcw -I/usr/local/include
 
 LD       = gcc
 LDFLAGS  = -no-pie -s -Wl,--as-needed -ldl -lcurl -nostartfiles -Wl,-e,_start
 
-LIB      = /usr/local/lib/lamp.a
+LIB      = /usr/local/lib/libamp.a
 
 TARGET   = curl_test
 SRCS     = curl.asm 
