@@ -28,7 +28,7 @@ CATEGORIES = {
         "strstr"
     ],
     "4. Conversion & Formatting": [
-        "CHR", "HEX$", "SPRINT", "STR$",
+        "ASC", "HEX$", "SPRINT", "STR$",
         "STRL$"
     ],
     "5. Console & Terminal I/O": [
@@ -256,6 +256,7 @@ def generate_root_readme(source_dir="src", inc_file="include/amp.inc", output_fi
     content.append("")
     content.append("### Build Requirements")
     content.append("- **Assembler**: [UASM](https://www.terraspace.co.uk/uasm.html) (configured for `-elf64 -q -pie`)")
+    content.append("  with patch file in the 'uasm-2.57_Patch' folder applied, or replacing the 'elf.c' file with the renamed 'elf.c.patched' file.")
     content.append("- **Archiver / Tools**: `ar`, `strip`, `mkdir`, `install`")
     content.append("")
     content.append("The resulting static library is output to `lib/libamp.a`.")

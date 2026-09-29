@@ -38,6 +38,7 @@ make
 
 ### Build Requirements
 - **Assembler**: [UASM](https://www.terraspace.co.uk/uasm.html) (configured for `-elf64 -q -pie`)
+  with patch file in the 'uasm-2.57_Patch' folder applied, or replacing the 'elf.c' file with the renamed 'elf.c.patched' file.
 - **Archiver / Tools**: `ar`, `strip`, `mkdir`, `install`
 
 The resulting static library is output to `lib/libamp.a`.
@@ -111,7 +112,7 @@ sudo make install
 
 | Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
-| **`CHR`** | `(text:PTR) -> rax` | Converts a string representing an integer into the corresponding integer value. |
+| **`ASC`** | `(text:PTR) -> rax` | Converts a string into the corresponding integer value. |
 | **`HEX$`** | `(num:QWORD) -> rax` | Converts a QWORD (64-bit unsigned integer) to its hexadecimal string representation. |
 | **`SPRINT`** | `(fmt:PTR, args:VARARG) -> rax` | Formats a string using printf-style formatting and stores the result in an arena-allocated buffer. |
 | **`STR$`** | `(num:QWORD) -> rax` | Converts a 64-bit signed integer into its STRING representation. Handles positive and negative numbers, as well as zero. |
