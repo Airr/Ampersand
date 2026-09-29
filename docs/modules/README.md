@@ -7,8 +7,8 @@
 | [appname.md](appname.md) | `APPNAME$` |
 | [apppath.md](apppath.md) | `APPPATH$` |
 | [arena.md](arena.md) | `ALLOC` |
+| [asc.md](asc.md) | `ASC` |
 | [chdir.md](chdir.md) | `CHDIR` |
-| [chr.md](chr.md) | `CHR` |
 | [cls.md](cls.md) | `CLS` |
 | [cmdcount.md](cmdcount.md) | `CMDCOUNT` |
 | [color.md](color.md) | `COLOR` |

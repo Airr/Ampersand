@@ -43,9 +43,9 @@ ifndef AMP_INC
 	ALLOC 		PROTO	requested_size:qword
 	APPNAME$ 	PROTO
 	APPPATH$ 	PROTO
+	ASC 		PROTO	text:PTR
 	CALLOC 		PROTO	count:qword, elem_size:qword
 	CHDIR 		PROTO	folder:ptr
-	CHR 		PROTO	text:PTR
 	CLOSE 		PROTO	fileHandle:qword
 	CLS 		PROTO
 	CMDCOUNT 	PROTO
