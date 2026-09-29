@@ -40,7 +40,7 @@ cd UASM
 git checkout v2.57  # or switch to the 2.57 release branch / tag
 ```
 
-### Step 2: Apply the Patch
+### Step 2: Apply the Patch (ONLY IF YOU CLONED FROM THE ORIGINAL REPOSITORY.  NOT NEEDED FOR MY FORKED REPOSITORY)
 
 You can apply the diff using either method:
 
