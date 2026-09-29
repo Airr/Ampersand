@@ -1,5 +1,5 @@
 diff --git a/elf.c b/elf.c
-index a8d612e..e77d3fe 100644
+index 36d0e19..e77d3fe 100644
 --- a/elf.c
 +++ b/elf.c
 @@ -11,6 +11,7 @@
@@ -10,7 +10,7 @@ index a8d612e..e77d3fe 100644
  
  #include "globals.h"
  #include "memalloc.h"
-@@ -1155,29 +1156,25 @@ static void write_relocs64( struct dsym *curr )
+@@ -1155,17 +1156,25 @@ static void write_relocs64( struct dsym *curr )
          DebugMsg(("write_relocs64(): reloc loc=%X type=%u idx=%u sym=%s ofs=%X addbyt=%u\n",
                    fixup->locofs, fixup->type, fixup->sym->ext_idx, fixup->sym->name, fixup->offset, fixup->addbytes ));
          switch ( fixup->type ) {
@@ -24,14 +24,7 @@ index a8d612e..e77d3fe 100644
 -#endif
 -            reloc64.r_addend += *(int_32*)(curr->e.seginfo->CodeBuffer + fixup->locofs);
 -            elftype = R_X86_64_PC32;
--
--		    /*
--		     * ELF64 external CALLs use PLT32 so they can be linked
--		     * into PIE executables. Other PC-relative references remain PC32.
--		     */            
--		    if (fixup->option == OPTJ_CALL &&
--		        fixup->sym != NULL &&
--		        fixup->sym->state == SYM_EXTERNAL) {
+-            break;
 +
 +		case FIX_RELOFF32:
 +
@@ -45,11 +38,9 @@ index a8d612e..e77d3fe 100644
 +		    reloc64.r_addend += *(int_32*)(curr->e.seginfo->CodeBuffer + fixup->locofs);
 +
 +		    if ( fixup->sym->state == SYM_EXTERNAL ) {
- 		        elftype = R_X86_64_PLT32;
- 		    } else {
- 		        elftype = R_X86_64_PC32;
--		    }		     
--            break;
++		        elftype = R_X86_64_PLT32;
++		    } else {
++		        elftype = R_X86_64_PC32;
 +		    }
 +		    break;
 +    
