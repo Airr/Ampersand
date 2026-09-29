@@ -1,6 +1,8 @@
 ifndef AMP_INC
     AMP_INC equ 1
 
+	CHR_END equ -1
+
     OPTION LITERALS:ON
     option casemap:none
     option frame:auto
@@ -46,6 +48,7 @@ ifndef AMP_INC
 	ASC 		PROTO	text:PTR
 	CALLOC 		PROTO	count:qword, elem_size:qword
 	CHDIR 		PROTO	folder:ptr
+	CHR$ 		PROTO	code:qword, args:vararg
 	CLOSE 		PROTO	fileHandle:qword
 	CLS 		PROTO
 	CMDCOUNT 	PROTO

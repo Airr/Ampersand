@@ -112,6 +112,7 @@ sudo make install
 | Function / Procedure | Signature / Registers | Description |
 | :--- | :--- | :--- |
 | **`ASC`** | `(text:PTR) -> rax` | Converts a string into the corresponding integer value. |
+| **`CHR$`** | `(code:qword, args:vararg) -> rax` | Builds a string from a list of character codes (0-255) terminated by a negative value (e.g. CHR_END / -1). |
 | **`HEX$`** | `(num:QWORD) -> rax` | Converts a QWORD (64-bit unsigned integer) to its hexadecimal string representation. |
 | **`SPRINT`** | `(fmt:PTR, args:VARARG) -> rax` | Formats a string using printf-style formatting and stores the result in an arena-allocated buffer. |
 | **`STR$`** | `(num:QWORD) -> rax` | Converts a 64-bit signed integer into its STRING representation. Handles positive and negative numbers, as well as zero. |

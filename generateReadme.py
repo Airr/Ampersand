@@ -28,7 +28,7 @@ CATEGORIES = {
         "strstr"
     ],
     "4. Conversion & Formatting": [
-        "ASC", "HEX$", "SPRINT", "STR$",
+        "ASC", "CHR$","HEX$", "SPRINT", "STR$",
         "STRL$"
     ],
     "5. Console & Terminal I/O": [
