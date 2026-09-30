@@ -46,8 +46,6 @@ main proc
     GUI_INIT(0,0)
 
     ; Create a new window
-    ; invoke gtk_window_new, GTK_WINDOW_TOPLEVEL
-    ; mov rbx, rax ; Store the window pointer in rbx
     mov win, NEW_WINDOW(0) ; Create a new window and store the pointer in rbx
 
     ; Set the window properties
