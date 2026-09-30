@@ -18,7 +18,7 @@ ifndef AMP_GTK
     gtk_container_add           PROTO :QWORD, :QWORD
     
 
-    SET_CALLBACK                PROTO :QWORD, :PTR, :QWORD
+    SET_CALLBACK                PROTO :QWORD, :PTR, :QWORD,:QWORD
     
 
 
@@ -41,8 +41,8 @@ ifndef AMP_GTK
 
     .code
 
-    SET_CALLBACK proc handle:qword, signal_name:ptr, callback:qword
-        g_signal_connect_data(handle,signal_name, callback,0,0,0)
+    SET_CALLBACK proc handle:qword, signal_name:ptr, callback:qword, data:qword
+        g_signal_connect_data(handle,signal_name, callback,data,0,0)
         ret
     SET_CALLBACK endp    
         

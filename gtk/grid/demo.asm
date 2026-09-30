@@ -20,22 +20,11 @@ include gtk.inc
 ; callback for buttons
 ; the USES keyword preserves registers used by GTK
 on_button_clicked PROC USES r12 r13 rbx rsi rdi widget:QWORD, data:QWORD
+    mov rax, data
 
-    xor     r13, r13
+    mov rbx, SPRINT("Button %d Clicked", rax)
+    SET_PROP(entry1, "text", rbx)
 
-    .if widget == but1
-        mov r13, 1
-    .elseif widget == but2
-        mov r13, 2
-    .elseif widget == but3
-        mov r13, 3
-    .endif
-
-
-    .if r13 !=0
-        mov rbx, SPRINT("Button %d Clicked", r13)
-        SET_PROP(entry1, "text", rbx)
-    .endif
 
     xor eax, eax ; Clear return register (GTK expects 0/FALSE for handled click)
     ret
@@ -85,10 +74,10 @@ main proc
     GRID_ATTACH(grid, but3,   1, 2, 1, 1) ; Attach Button 3 to the grid at Column 1, Row 2
 
 
-    SET_CALLBACK(win,"destroy", addr gtk_main_quit)
-    SET_CALLBACK(but1, "clicked", CALLBACK(on_button_clicked))
-    SET_CALLBACK(but2, "clicked", CALLBACK(on_button_clicked))
-    SET_CALLBACK(but3, "clicked", CALLBACK(on_button_clicked))
+    SET_CALLBACK(win,"destroy", addr gtk_main_quit,0)
+    SET_CALLBACK(but1, "clicked", CALLBACK(on_button_clicked), 1)
+    SET_CALLBACK(but2, "clicked", CALLBACK(on_button_clicked), 2)
+    SET_CALLBACK(but3, "clicked", CALLBACK(on_button_clicked), 3)
 
     ; Show all widgets in the window
     GUI_SHOW(win)
