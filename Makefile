@@ -29,7 +29,8 @@ OBJS = $(patsubst $(SRC_DIR)/%.asm,$(OBJ_DIR)/%.o,$(ASM_SRCS))
 
 # Library goes in LIB_DIR
 TARGET_LIB = $(LIB_DIR)/$(LIBRARYNAME)
-TARGET_INCS = $(INC_DIR)/amp.inc $(INC_DIR)/syscall.inc
+# TARGET_INCS = $(INC_DIR)/amp.inc $(INC_DIR)/syscall.inc
+TARGET_INCS = $(wildcard $(INC_DIR)/*.inc)
 
 all: $(TARGET_LIB)
 
