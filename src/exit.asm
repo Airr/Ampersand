@@ -29,7 +29,7 @@ option frame:auto
 PUBLIC EXIT
 EXIT PROC code:qword
     mov rdi, code           ; Exit code
-    mov rax, 60             ; sys_exit
+    mov rax, 231            ; sys_exit_group
     syscall
 EXIT endp
 END
