@@ -17,14 +17,6 @@ ifndef AMP_GTK
     gtk_entry_new               PROTO
     gtk_container_add           PROTO :QWORD, :QWORD
 
-    ; GTK BUILDER PROTOS
-    gtk_builder_new             PROTO
-    gtk_builder_add_from_file   PROTO :QWORD, :PTR, :QWORD
-    gtk_builder_connect_signals PROTO :QWORD, :QWORD
-    gtk_builder_get_object      PROTO :QWORD, :PTR
-    gtk_widget_get_name         PROTO :QWORD    
-    
-
     SET_CALLBACK                PROTO :QWORD, :PTR, :QWORD,:QWORD
     
 
@@ -45,12 +37,6 @@ ifndef AMP_GTK
         GRID_ATTACH             equ gtk_grid_attach
         NEW_ENTRY               equ gtk_entry_new
         CONTAINER_ADD           equ gtk_container_add
-
-        NEW_BUILDER             equ gtk_builder_new
-        BUILDER_ADD             equ gtk_builder_add_from_file
-        BUILDER_CONNECT         equ gtk_builder_connect_signals
-        BUILDER_GET             equ gtk_builder_get_object
-        GET_NAME                equ gtk_widget_get_name
 
     .code
 
